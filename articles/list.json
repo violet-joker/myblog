@@ -3,6 +3,14 @@
   "key": "≡",
   "children": [
     {
+      "label": "get_json.py",
+      "key": "get_json.py"
+    },
+    {
+      "label": "list.json",
+      "key": "list.json"
+    },
+    {
       "label": "杂项",
       "key": "杂项",
       "children": [
@@ -73,6 +81,13 @@
         {
           "label": "tcp_ip",
           "key": "网络编程/tcp_ip.md"
+<<<<<<< HEAD
+=======
+        },
+        {
+          "label": "linux高性能服务器编程",
+          "key": "网络编程/linux高性能服务器编程.md"
+>>>>>>> origin/main
         }
       ]
     }
