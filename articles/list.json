@@ -7,12 +7,20 @@
       "key": "杂项",
       "children": [
         {
+          "label": "opengl",
+          "key": "杂项/opengl.md"
+        },
+        {
           "label": "stl学习笔记",
           "key": "杂项/stl学习笔记.md"
         },
         {
           "label": "c++进阶语法",
           "key": "杂项/c++进阶语法.md"
+        },
+        {
+          "label": "xiaopeng",
+          "key": "杂项/xiaopeng.md"
         },
         {
           "label": "qt",
@@ -41,6 +49,10 @@
           "key": "数据结构与算法/搜索树.md"
         },
         {
+          "label": "dijkstra",
+          "key": "数据结构与算法/dijkstra.md"
+        },
+        {
           "label": "树状数组",
           "key": "数据结构与算法/树状数组.md"
         },
@@ -59,16 +71,16 @@
           "key": "网络编程/linux多线程服务端编程.md"
         },
         {
-          "label": "boost网络编程",
-          "key": "网络编程/boost网络编程.md"
-        },
-        {
           "label": "计算机网络理论",
           "key": "网络编程/计算机网络理论.md"
         },
         {
           "label": "tcp_ip",
           "key": "网络编程/tcp_ip.md"
+        },
+        {
+          "label": "asio网络编程",
+          "key": "网络编程/asio网络编程.md"
         }
       ]
     }

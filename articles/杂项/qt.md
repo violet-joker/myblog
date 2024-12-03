@@ -1,3 +1,55 @@
+## lvim环境配置
+
+在~/.clangd配置文件添加qt头文件路径
+
+```shell
+CompileFlags:
+  Add:
+    # c++11标准库
+    - "-I/usr/include/c++/11/"
+    # qt相关头文件路径
+    - "-I/usr/include/x86_64-linux-gnu/qt5/"
+    - "-I/usr/include/x86_64-linux-gnu/qt5/QtConcurrent"
+    - "-I/usr/include/x86_64-linux-gnu/qt5/QtGui"
+    - "-I/usr/include/x86_64-linux-gnu/qt5/QtOpenGLExtensions"
+    - "-I/usr/include/x86_64-linux-gnu/qt5/QtSql"
+    - "-I/usr/include/x86_64-linux-gnu/qt5/QtXml"
+    - "-I/usr/include/x86_64-linux-gnu/qt5/QtCore"
+    - "-I/usr/include/x86_64-linux-gnu/qt5/QtNetwork"
+    - "-I/usr/include/x86_64-linux-gnu/qt5/QtPlatformHeaders"
+    - "-I/usr/include/x86_64-linux-gnu/qt5/QtTest"
+    - "-I/usr/include/x86_64-linux-gnu/qt5/QtDBus"
+    - "-I/usr/include/x86_64-linux-gnu/qt5/QtOpenGL"
+    - "-I/usr/include/x86_64-linux-gnu/qt5/QtPrintSupport"
+    - "-I/usr/include/x86_64-linux-gnu/qt5/QtWidgets"
+```
+
+xmake 构建项目
+```shell
+xmake create -t qt.quickapp test
+xmake create -t qt.widgetapp test
+```
+
+编写lua脚本编译ui文件
+
+```lua
+-- 定义一个phony类型的target来编译.ui文件
+target("ui")
+    set_kind("phony")
+    on_load(function (target)
+        cmd = "ls -A1 src/"
+        files = os.iorun(cmd)
+        for file in string.gmatch(files, "(.-)\n") do
+            idx = file:match(".+()%.ui")
+            if (idx) then
+                ui_file = "src/" .. file
+                h_file  = "src/ui_" .. file:sub(1, idx-1) .. ".h"
+                os.vrun("uic -o " .. h_file .. " " .. ui_file)
+            end
+        end
+    end)
+```
+
 ## 信号和槽
 
 ```c++

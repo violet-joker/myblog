@@ -127,7 +127,7 @@ void handle_connections() {
         int bytes = sock.read_some(buffer(buf));
         string msg(buf, bytes);
         // 回传信息
-        sock.write_some(msg);
+        sock.write_some(buffer(msg));
         sock.close();
     }
 }
