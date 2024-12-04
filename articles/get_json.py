@@ -32,7 +32,7 @@ def get_data(path, name):
 	return data
 
 root = os.getcwd()
-unwanted = ["get_json.py", "list.json", "linux高性能服务器编程.md"]
+unwanted = ["get_json.py", "list.json", "linux高性能服务器编程.md", "opengl.md", "计算机网络理论.md"]
 data = get_data("", "≡")
 json_data = json.dumps(data, ensure_ascii=False, indent=2)
 with open('list.json', 'w', encoding='utf-8') as f:

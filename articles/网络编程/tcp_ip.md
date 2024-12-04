@@ -294,11 +294,11 @@ TCP启动计时器等待ACK应答，若超时则重传
 双方各发送一次FIN消息后断开连接
 
 > A ----   FIN: SEQ   ----> B
->
+
 > A <--- ACK: SEQ, ACK ---- B
->
+
 > A <--- FIN: SEQ, ACK ---- B
->
+
 > A ---- ACK: SEQ, ACK ---> B
 
 

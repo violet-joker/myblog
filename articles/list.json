@@ -7,10 +7,6 @@
       "key": "杂项",
       "children": [
         {
-          "label": "opengl",
-          "key": "杂项/opengl.md"
-        },
-        {
           "label": "stl学习笔记",
           "key": "杂项/stl学习笔记.md"
         },
@@ -19,12 +15,12 @@
           "key": "杂项/c++进阶语法.md"
         },
         {
-          "label": "xiaopeng",
-          "key": "杂项/xiaopeng.md"
-        },
-        {
           "label": "qt",
           "key": "杂项/qt.md"
+        },
+        {
+          "label": "多线程",
+          "key": "杂项/多线程.md"
         }
       ]
     },
@@ -69,10 +65,6 @@
         {
           "label": "linux多线程服务端编程",
           "key": "网络编程/linux多线程服务端编程.md"
-        },
-        {
-          "label": "计算机网络理论",
-          "key": "网络编程/计算机网络理论.md"
         },
         {
           "label": "tcp_ip",
