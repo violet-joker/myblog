@@ -2,7 +2,7 @@
 
 [toc]
 
-## 常用函数接口(linux环境)
+# 常用函数接口(linux环境)
 
 ```c++
 #include <sys/socket.h>
@@ -50,7 +50,7 @@ ssize_t read(int fd, void* buf, size_t nbytes);
 int close(int fd);
 ```
 
-## 套接字类型与协议设置
+# 套接字类型与协议设置
 
 PF_INET     IPv4
 PF_INET6    IPv6
@@ -79,7 +79,7 @@ PF_IPX      IPX Nevell协议
 
 - 限制每次传输的数据大小
 
-## 地址族与数据序列
+# 地址族与数据序列
 
 ```c++
 struct sockaddr_in {
@@ -169,9 +169,9 @@ int main() {
 ```
 
 
-## 基于TCP的服务端/客户端
+# 基于TCP的服务端/客户端
 
-### TCP/IP 四层协议栈
+## TCP/IP 四层协议栈
 
 - 链路层: 定义LAN、WAN、MAN等网络标准(物理连接)
 
@@ -181,7 +181,7 @@ int main() {
 
 - 应用层: 利用封装好的套接字，根据程序特点决定服务器、客户端之间的数据传输规定
 
-### TCP服务端
+## TCP服务端
 
 > socket() -> bind() -> listen() -> accept() -> read()/write() -> close()
 
@@ -227,7 +227,7 @@ int main() {
 read函数从文件读取数据到指定缓冲区，
 需要手动末尾添'\0'，防止后续访问字符串时越界。
 
-### TCP客户端
+## TCP客户端
 
 > socket() -> connect() -> read()/write() -> close()
 
@@ -267,9 +267,9 @@ int main() {
 }
 ```
 
-## TCP内部工作原理
+# TCP内部工作原理
 
-### 与对方套接字建立连接(三次握手)
+## 与对方套接字建立连接(三次握手)
     
 通过向数据包分配序号并确认，可以在数据丢失时马上查看并重传丢失的数据包
 
@@ -279,7 +279,7 @@ int main() {
 >
 > A ------ ACK -----> B
     
-### 与对方主机的数据交互
+## 与对方主机的数据交互
 
 ACK号 = SEQ号 + 传递字节数 + 1
 (下次要传递的SEQ号)
@@ -291,7 +291,7 @@ ACK号 = SEQ号 + 传递字节数 + 1
 TCP启动计时器等待ACK应答，若超时则重传
 
 
-### 断开与对方套接字的连接(四次挥手)
+## 断开与对方套接字的连接(四次挥手)
 
 双方各发送一次FIN消息后断开连接
 
@@ -304,7 +304,7 @@ TCP启动计时器等待ACK应答，若超时则重传
 > A ---- ACK: SEQ, ACK ---> B
 
 
-## 基于UDP的回声服务端/客户端
+# 基于UDP的回声服务端/客户端
 
 不存在请求连接和受理过程，某种意义上无法明确区分服务端和客户端
 
@@ -324,7 +324,7 @@ ssize_t recvfrom(int sock, void* buff, size_t, nbytes, int flags,
                 sockaddr* from, socklen_t* addrlen);
 ```
 
-### UDP服务端
+## UDP服务端
 
 > socket() -> bind() -> sendto()/recvfrom() -> close()
 
@@ -367,7 +367,7 @@ int main() {
 }
 ```
 
-### UDP客户端 
+## UDP客户端 
 
 > socket() -> sendto()/recvfrom() -> close()
 
@@ -414,9 +414,9 @@ int main() {
 }
 ```
 
-## 优雅地断开套接字连接
+# 优雅地断开套接字连接
 
-### 基于TCP的半关闭
+## 基于TCP的半关闭
 
 既发送了EOF，又保留了输入流，可以接收对方数据。
 
@@ -472,7 +472,7 @@ ios::trunc  // 如果文件存在，将其长度截断为0
 ios::binary // 以二进制打开
 ```
 
-## 域名及网络地址
+# 域名及网络地址
 
 DNS (Domain Name System, 域名系统)
 
@@ -495,11 +495,11 @@ struct hostent {
 };
 ```
 
-## 套接字的多种可选项
+# 套接字的多种可选项
 
 ...
 
-### Time-wait状态
+## Time-wait状态
 
 关闭连接时，先发送FIN包的一端最后需要进入Time-wait状态，
 因此即使服务端程序结束了，而系统套接字实际未关闭，此时
@@ -507,7 +507,7 @@ struct hostent {
 重新绑定端口号。由于客户端套接字使用connect动态随机分配
 端口号，而服务端绑定固定端口号，往往受影响的是服务端。
 
-### Nagle算法
+## Nagle算法
 
 数据包发送过度可能会引起网络过载；
 nagle算法主要是避免发送小的数据包，
@@ -516,9 +516,9 @@ nagle算法主要是避免发送小的数据包，
 
 适用于发送大批量的小数据。
 
-## 多进程服务端
+# 多进程服务端
 
-### 并发服务器实现方法
+## 并发服务器实现方法
 
 - 多进程服务器：通过创建多个进程提供服务
 
@@ -527,7 +527,7 @@ nagle算法主要是避免发送小的数据包，
 - 多线程服务器：通过生成与客户端等量的线程池提供服务
 
 
-### fork创建进程
+## fork创建进程
 
 ```c++
 #include <unistd.h>
@@ -537,7 +537,7 @@ nagle算法主要是避免发送小的数据包，
 // 成功返回进程ID，失败返回-1
 pid_t fork(void);
 ```
-### 僵尸进程
+## 僵尸进程
 
 终止方式：调用exit(); return语句。
 
@@ -560,7 +560,7 @@ pid_t waitpid(pid_t pid, int* statloc, int options);
 WIFEXITED(status); // (wait if exited) 子进程正常终止，返回true
 WEXITSTATUS(status); // (wait exit status) 返回子进程返回值
 ```
-### 信号与signal函数
+## 信号与signal函数
 
 ```c++
 #include <signal.h>
@@ -606,7 +606,7 @@ struct sigaction {
 };
 ```
 
-### 基于多任务的并发服务器
+## 基于多任务的并发服务器
 
 ```c++
 #include <iostream>
@@ -667,7 +667,7 @@ int main() {
 
 子进程复制父进程socket的文件描述符，对通信的socket引用计数。
 
-### 回声客户端的I/O程序分割
+## 回声客户端的I/O程序分割
 
 将read和write从循环里分开，主进程只进行写操作，子进程只进行读操作。
 
@@ -681,7 +681,7 @@ else
 close();
 ```
 
-## 进程间通信
+# 进程间通信
 
 管道通信
 
@@ -699,9 +699,9 @@ read(fds[0], buf, BUF_SIZE);
 管道可以双向通信，但先调用read的进程将得到数据。
 创建两个管道即可实现。
 
-## I/O复用
+# I/O复用
 
-### select函数
+## select函数
 
 ```c++
 #include <sys/select.h>
@@ -765,7 +765,7 @@ int main() {
 }
 ```
 
-### 实现I/O复用服务端
+## 实现I/O复用服务端
 
 ```c++
 #include <iostream>
@@ -826,7 +826,7 @@ int main() {
 }
 ```
 
-## 多种I/O函数
+# 多种I/O函数
 
 ```c++
 #include <sys/socket.h>
@@ -844,9 +844,9 @@ MSG_DONTWAIT    // 调用I/O时不阻塞
 MSG_WAITALL     // 防止函数返回，直到接收全部请求的字节数
 ```
 
-## 多播与广播
+# 多播与广播
 
-## epoll
+# epoll
 
 ```c++
 struct epoll_event {
@@ -892,7 +892,7 @@ EPOLLONESHOT    // 发生一次事件后不再收到事件通知
 
 ```
 
-### 基于epoll的回声服务器端
+## 基于epoll的回声服务器端
 
 ```c++
 #include <iostream>
@@ -958,7 +958,7 @@ int main() {
 }
 ```
 
-## 多线程服务器端的实现
+# 多线程服务器端的实现
 
 ```c++
 #include <pthread.h>
@@ -1095,7 +1095,7 @@ int main() {
 }
 ```
 
-### 线程的销毁和多线程并发服务器端的实现
+## 线程的销毁和多线程并发服务器端的实现
 
 服务端
 ```c++
@@ -1238,7 +1238,7 @@ int main() {
 }
 ```
 
-## 制作http服务器端
+# 制作http服务器端
 
 无状态的stateless协议，使用cookie和session技术。
 

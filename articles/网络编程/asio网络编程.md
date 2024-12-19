@@ -1,4 +1,4 @@
-## 检测连接何时关闭
+# 检测连接何时关闭
 
 ```c++
 char data[0xff];
@@ -9,7 +9,7 @@ if (err == error::eof) {
 }
 ```
 
-## 三种io_context处理模式
+# 三种io_context处理模式
 
 + 一个io处理一个线程，基础
 
@@ -58,9 +58,9 @@ void run_service(int idx) {
 }
 ```
 
-## 回显服务器/客户端
+# 回显服务器/客户端
 
-### TCP同步客户端
+## TCP同步客户端
 
 ```c++
 #include <boost/asio.h>
@@ -105,7 +105,7 @@ int main() {
 
 ```
 
-### TCP同步服务端
+## TCP同步服务端
 
 ```c++
 #include <iostream>

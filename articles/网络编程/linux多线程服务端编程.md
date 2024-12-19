@@ -1,6 +1,6 @@
-## 线程安全
+# 线程安全
 
-### 二段式构造
+## 二段式构造
 
 构造函数 + initialize()
 
@@ -8,7 +8,7 @@
 线程使用，这是线程不安全的。当某些回调函数需要传递this指针，可
 以在外定义一个函数，构造结束后执行
 
-### 内存问题
+## 内存问题
 
 + 缓冲区溢出 ---> 用string或vector<char>
 
@@ -20,7 +20,7 @@
 
 + 内存碎片
 
-### 线程安全的Observer
+## 线程安全的Observer
 
 完成模式基本逻辑，Observer通过register_在Observable登记，
 Observable的notifyObservers通知所有登记的Observer对象进行
@@ -66,7 +66,7 @@ Observable并不知道实例是否销毁，当实例正在析构，
 使用原始指针并不妥，当其暴露给别的线程，如果在某个地方通过其他的指针
 释放了这段内存，此时原指针成为了空悬指针。
 
-#### 使用智能指针实现Observer
+## 使用智能指针实现Observer
 
 shared_ptr引用计数管理对象，weak_ptr判断是否空悬。
 
@@ -108,7 +108,7 @@ void Observable::notifyObservers() {
 }
 ```
 
-### 再论shared_ptr的线程安全
+## 再论shared_ptr的线程安全
 
 - 一个shared_ptr对象可以被多个线程同时读取
 
@@ -153,7 +153,7 @@ void write() {
 的shared_ptr的构造和析构放在临界区外，以提升性能。
 
 
-### shared_ptr技术与陷阱
+## shared_ptr技术与陷阱
 
 意外延长对象声明期，例如function，bind等将实参拷贝了一份。
 
@@ -162,7 +162,7 @@ void write() {
 总之就是注意是否存在未考虑到的额外计数引用的地方导致未能在预想的时机释放资源。
 
 
-### 对象池
+## 对象池
 
 假设有一个Stock类表示股票，同名的股票对象可以共享，当没有任何人使用
 该股票时对象析构。设计一个对象池StockFactory类，根据key返回Stock对象。
@@ -270,9 +270,9 @@ shared_ptr<Stock> StockFactory::get(const string& key) {
 }
 ```
 
-## 线程同步精要
+# 线程同步精要
 
-### 互斥器(mutex)
+## 互斥器(mutex)
 
 坚持使用非递归互斥器
 

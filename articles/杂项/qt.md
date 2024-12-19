@@ -1,4 +1,4 @@
-## lvim环境配置
+# lvim环境配置
 
 在~/.clangd配置文件添加qt头文件路径
 
@@ -55,7 +55,7 @@ target("ui")
     end)
 ```
 
-## 信号和槽
+# 信号和槽
 
 ```c++
 QObject::connect(sender, SINGNAL(singnal()), receiver, SLOT(slot()));
@@ -68,7 +68,7 @@ QMenubar* menubar = new QMenubar();
 QStatusbar* statusbar = new QStatusbar();
 ```
 
-## QLabel
+# QLabel
 
 ```c++
 // 标签
@@ -101,7 +101,7 @@ std::string str = std::string((const char*) qstring.toLocal8Bit());
 lable->setGeometry(0, 0, 100, 300);
 ```
 
-## font
+# font
 
 ```c++
 QFont font = lable->font();
@@ -118,7 +118,7 @@ lable->setFont(font);
 lable->setStyleSheet("QLabel{background-color: green; color: cyan;}");
 ```
 
-## Button
+# Button
 
 ```c++
 // PushButton, RadionButton, CheckBox, 普通，单选，复选按钮
@@ -146,7 +146,7 @@ void Widget::checked(bool click) {
 }
 ```
 
-## QPlainTextEdit
+# QPlainTextEdit
 
 ```c++
 QPlainTextEdit plai = new QPlainTextEdit(tr("hello world"));
@@ -162,7 +162,7 @@ plai->setLineWrapMode(QPlainTextEdit::NoWrap);      // 无软换行
 plai->setLineWrapMode(QPlainTextEdit::WidgetWidth); // 有软换行
 ```
 
-## QLineEdit
+# QLineEdit
 
 ```c++
 QLineEdit le = new QLineEdit();
@@ -173,11 +173,11 @@ le->setEchoMode(QLineEdit::Password); // 显示*
 le->setParnet(this);
 ```
 
-## QTextEdit
+# QTextEdit
 
 类似QPlainTextEdit
 
-## QBoxLayout
+# QBoxLayout
 
 ```c++
 // 水平约束
@@ -204,7 +204,7 @@ setLayout(hbx1);
 QVBoxLayout hbx2;
 ```
 
-## QProgressbar 进度条
+# QProgressbar 进度条
 
 ```c++
 QProgressBar* pro = new QProgressBar();
@@ -222,7 +222,7 @@ pro->setOrientation(Qt::Vertical);
 pro->setOrientation(Qt::Horizontal);
 ```
 
-## Spinbox 显示数字控件
+# Spinbox 显示数字控件
 
 ```c++
 QSpinBox spn = new QSpinBox();
@@ -250,7 +250,7 @@ void Widget::func(int size) {
 
 
 
-## QGraphicsView
+# QGraphicsView
 
 ```c++
 QGraphicsView* view = new QGraphicsView(0, 0, 300, 400);
