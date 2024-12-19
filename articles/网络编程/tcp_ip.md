@@ -1,5 +1,7 @@
 > 《TCP&IP网络编程》笔记
 
+[toc]
+
 ## 常用函数接口(linux环境)
 
 ```c++
@@ -294,11 +296,11 @@ TCP启动计时器等待ACK应答，若超时则重传
 双方各发送一次FIN消息后断开连接
 
 > A ----   FIN: SEQ   ----> B
-
+>
 > A <--- ACK: SEQ, ACK ---- B
-
+>
 > A <--- FIN: SEQ, ACK ---- B
-
+>
 > A ---- ACK: SEQ, ACK ---> B
 
 
@@ -1235,3 +1237,11 @@ int main() {
     close(sock);
 }
 ```
+
+## 制作http服务器端
+
+无状态的stateless协议，使用cookie和session技术。
+
+请求消息的结构：
+
+请求行，消息头，空行，消息体

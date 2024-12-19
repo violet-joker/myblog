@@ -48,8 +48,56 @@ void dijkstra() {
 # 堆优化dijkstra
 
 可用优先队列维护点的距离，使得每次取最近的点时间复杂度为O(logn)，
-总体时间复杂度为O(nlogn)
+总体时间复杂度为**O(nlogn)**
+
+采用邻接表存图，适合稀疏图。
 
 ```c++
+// .second用于表示点编号，.first表示该点到源点的距离
+typedef pair<int, int> PII;
+const int N = 1e5 + 10;
+int n, m, d[N], x, y, z;
+bool vis[N];
 
+struct Edge {
+    // 到达的点，边权值
+    int v, w;
+};
+
+vector<Edge> edge[N];
+
+int main() {
+    cin >> n >> m;
+    while (m--) {
+        cin >> x >> y >> z;
+        edge[x].push_back({y, z});
+        edge[y].push_back({x, z});
+    }
+    dijkstra();
+}
+```
+
+```c++
+void dijkstra() {
+    memset(d, 127, sizeof(d));
+    // 优先队列(小根堆)，pair默认以first为排序标准
+    priority_queue<PII, vector<PII>, greater<PII>> heap;
+    d[1] = 0;
+    heap.push({0, 1});
+
+    while (!heap.empty()) {
+        PII x = heap.top();
+        heap.pop();
+        int t = x.second;
+        if (vis[t]) continue;
+        vis[t] = true;
+
+        // 取最近的点t，更新到其他点的距离
+        for (auto i : edge[t])
+            if (!vis[i.v] && d[t] + i.w < d[i.v]) {
+                d[i.v] = d[t] + i.w;
+                heap.push({d[i.v], i.v});
+            }
+    }
+}
 ```

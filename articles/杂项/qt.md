@@ -36,16 +36,21 @@ xmake create -t qt.widgetapp test
 -- 定义一个phony类型的target来编译.ui文件
 target("ui")
     set_kind("phony")
+    -- 使用add_files添加需要编译的ui文件即可
+    add_files("src/mainwindow.ui")
     on_load(function (target)
-        cmd = "ls -A1 src/"
-        files = os.iorun(cmd)
-        for file in string.gmatch(files, "(.-)\n") do
-            idx = file:match(".+()%.ui")
-            if (idx) then
-                ui_file = "src/" .. file
-                h_file  = "src/ui_" .. file:sub(1, idx-1) .. ".h"
-                os.vrun("uic -o " .. h_file .. " " .. ui_file)
+        for _, file in ipairs(target:sourcefiles()) do
+            local idx = file:reverse():find("/", 1, true)
+            local path, name
+            if idx then
+                path = file:sub(1, #file - idx + 1)
+                name = file:sub(#file - idx + 2, #file - 3)
+            else
+                path = ""
+                name = file
             end
+            h_file = path .. "ui_" .. name .. ".h"
+            os.vrun("uic -o " .. h_file .. " " .. file)
         end
     end)
 ```
