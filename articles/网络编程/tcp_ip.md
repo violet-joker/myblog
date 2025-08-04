@@ -255,7 +255,7 @@ int main() {
 
     std::cout << "send: ";
     // ctrl + D，文件终止符
-    while (std::cin.getline(message)) {
+    while (std::cin.getline(message, BUF_SIZE)) {
         write(sock, message, strlen(message));
         str_len = read(sock, message, BUF_SIZE);
         message[str_len] = 0;

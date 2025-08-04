@@ -15,12 +15,20 @@
           "key": "杂项/c++进阶语法.md"
         },
         {
+          "label": "linux驱动学习",
+          "key": "杂项/linux驱动学习.md"
+        },
+        {
           "label": "qt",
           "key": "杂项/qt.md"
         },
         {
           "label": "多线程",
           "key": "杂项/多线程.md"
+        },
+        {
+          "label": "raspi",
+          "key": "杂项/raspi.md"
         }
       ]
     },

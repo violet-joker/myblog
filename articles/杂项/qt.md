@@ -261,3 +261,102 @@ scene->addItem(item);
 
 ```
 
+# QTableWidget
+
+```c++
+setRowCount(int rows);
+setText(const QString& text);
+
+// 信号
+cellClicked(int row, int column);
+cellEntered(int row, int column);
+itemClicked(QTableWidgetItem *item);
+```
+
+# QT + VTK
+
+```mermaid
+flowchart TB
+
+vtkCubeSoure --> vtkPolyDataMapper --> vtkActor --> vtkRenderer
+
+vtkRenderer --> vtkRenderWindow --> vtkRenderWindowInteractor
+
+```
+
+```c++
+vtkNew<vtkGenericOpenGLRenderWindow> renderWindow;
+vtkNew<vtkRenderer> renderer;   // 渲染器
+vtkNew<vtkPoints> points;       // 原始数据点(仅包含坐标)
+vtkNew<vtkPolyData> polydata;   // 包含其他信息的数据集
+vtkNew<vtkVertexGlyphFilter> glyphFilter;   // 将点转换为可渲染的单元(将点转换成小球)
+vtkNew<vtkPolyDataMapper> mapper;   
+vtkNew<vtkActor> actor;
+vtkNew<vtkAxesActor> axesActor; // 坐标轴
+vtkNew<vtkCamera> camera;       // 相机
+
+
+// 设置坐标轴长度
+axesActor->SetTotalLength(10, 10, 10);
+
+
+// 数据添加基本流程
+points->InsertNextPoint(x, y, z);
+polydata->SetPoints(points);
+glyphFilter->SetInputData(polydata);
+mapper->SetInputConnection(glyphFilter->GetOutputPort());
+actor->SetMapper(mapper);
+renderer->AddActor(actor);
+renderer->AddActor(axesActor);
+renderer->SetActiveCamera(camera);
+renderWindow->Render();
+
+// 添加数据
+points->InsertNextPoint(x, y, z);
+points->Modified();
+
+// 相机设置位置、角度、焦点
+camera->SetPosition(x, y, z);
+camera->SetViewUp(0, 0, 1);
+camera->SetFocalPoint(0, 0, 0);
+
+
+vtkNew<vtkCellArray> cells;
+vtkNew<vtkPolyDataMapper> mapper_line;
+vtkNew<vtkPolyData> polydata_line;
+vtkNew<vtkActor> actor_line;
+
+// 渲染曲线(需要添加点的信息)
+polydata_line->SetPoints(points);
+polydata_line->SetLines(cells);
+mapper_line->SetMapper(mapper_line);
+actor_line->SetMapper(mapper_line);
+
+// 设置某条线的连线关系
+vtkNew<vtkLine> line;
+line->GetPointIds()->SetId(0, i);
+line->GetPointIds()->SetId(1, i + 1);
+cells->InsertNextCell(line);
+
+// 设置颜色
+actor_line->GetProperty()->SetColor(1.0, 0.0, 0.0);
+
+// 设置曲线
+cells->InsertNextCell({i, j, k});
+```
+
+## 添加左下角同步小坐标轴
+```c++
+vtkNew<vtkOrientationMarkerWidget> axesWidget;
+axesWidget->SetOutlineColor(0.93, 0.57, 0.13);
+axesWidget->SetOrientationMarker(axesActor);
+axesWidget->SetInteractor(vtkWidget->interactor());
+axesWidget->SetEnabled(1);
+axesWidget->SetViewport(0.0, 0.0, 0.2, 0.2);
+axesWidget->EnabledOn();
+axesWidget->InteractiveOn();
+```
+
+在renderWindow->AddRenderer(renderer)，渲染窗口在添加渲染器后，
+才会生成或绑定交互器vktRenderWindowInteractor。
+

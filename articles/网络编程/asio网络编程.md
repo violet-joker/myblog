@@ -1,4 +1,53 @@
-# 检测连接何时关闭
+# 常用函数
+
+## IP地址
+
+```c++
+// 根据字符串创建v4或v6地址
+ip::address::from_string(str);
+
+ip::address addr = ip::address::from_string("127.0.0.1");
+```
+
+## 端点
+
+```c++
+ip::tcp::endpoint;
+ip::udp::endpoint;
+ip::icmp::endpoint;
+
+endpoint();                 // 默认构造函数
+endpoint(protocol, port);   // 常用来创建可以接受新连接的服务端socket
+endpoint(addr, port);       // 连接到某个地址和端口号的端点
+
+ip::tcp::endpoint ep;
+ip::tcp::endpoint ep(ip::tcp::v4(), 80);
+ip::tcp::endpoint ep(ip::address::from_string("127.0.0.1"), 80);
+
+// 根据端点获取地址、端口、协议
+cout << ep.address().to_string();
+cout << ep.port();
+cout << ep.protocol();
+```
+
+## 套接字
+
+```c++
+io_service service;
+ip::udp::socket socket(service, ep);
+
+```
+
+## udp 通讯
+```c++
+ip::udp::endpoint target_ep;                    // 用于接收记录另一设备的ip和端口号
+ip::udp::endpoint local_ep(ip::address, port);  // 绑定本地端口的ip和端口号
+ip::udp::socket socket(service, local_ep);      // 将套接字绑定本地端点
+socket.receive_from(buffer, target_ep);         // 接受时将自动绑定target_ep的ip和端口
+socket.send_to(buffer, target_ep);
+```
+
+## 检测是否关闭链接
 
 ```c++
 char data[0xff];
@@ -84,7 +133,7 @@ void sync_echo(string msg) {
     int bytes = sock.read_some(buffer(buf));
     string copy(buf, bytes);
     cout << "server echoed our " << msg << ": "
-        << (copy == msg ? "OK" << "FAIL") << endl;
+        << (copy == msg ? "OK" : "FAIL") << endl;
     
     sock.close();
 }
@@ -136,4 +185,32 @@ int main() {
     handle_connections();
 }
 
+```
+
+# UDP超时结束堵塞
+
+```c++
+// 使用asio::steady_timer定时器设置timeout
+
+steady_timer timer(service, 100ms);
+// 回调函数必须匹配错误码参数
+timer.async_wait([&](error_code ec) {
+    if (!ec) {
+        socket.close();
+        std::cout << "timeout\n";
+    }
+});
+
+// 缓冲区，端点，处理完成后的回调函数
+socket.async_receive_from(buffer(buf), ep, 
+        [&] (error_code ec, size_t bytes) {
+            timer.cancel(); 
+        });
+
+service.run();
+
+
+
+// 回调签名必须严格匹配：错误码，实际接受字节数
+void handler(const asio::error_code& ec, std::size_t bytes_transferred);
 ```

@@ -11,8 +11,6 @@
 #include <iostream>
 #include <cstring>
 
-using namespace std;
-
 class String {
 public:
     String(const char* string) {
@@ -38,7 +36,9 @@ std::ostream& operator<<(std::ostream& stream, const String& string) {
 int main() {
     String a = "hello world";
     String b = a;
-    cout << a << endl << b << endl;
+    // 此时为浅拷贝，m_buffer指向同一段地址
+    // 程序结束后同一段内存释放两次，内存释放错误
+    std::cout << a << std::endl << b << std::endl;
 }
 ```
 
@@ -60,7 +60,10 @@ String(const String& other)
 
 # 虚函数
 
-实现多态
+实现多态的动态绑定
+
+当使用基类指针或引用调用成员函数时，非虚函数只会调用基类的函数，而
+虚函数则能正确调用实际对象对应派生类的成员函数。
 
 没有使用虚函数的情况：将打印两次Entity，根据数据类型寻找对应的函数
 
@@ -98,7 +101,7 @@ int main() {
 }
 ```
 
-使用虚函数，虚表维护映射关系，查找真正对应的函数。
+使用虚函数，虚表维护映射关系，遍历查找真正对应的函数。
 虚表会带来内存空间上的消耗以及查询映射时的性能消耗，
 但其影响微乎其微，非极限状态可忽略不记。
 
