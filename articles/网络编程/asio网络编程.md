@@ -16,13 +16,18 @@ ip::tcp::endpoint;
 ip::udp::endpoint;
 ip::icmp::endpoint;
 
-endpoint();                 // 默认构造函数
-endpoint(protocol, port);   // 常用来创建可以接受新连接的服务端socket
-endpoint(addr, port);       // 连接到某个地址和端口号的端点
+// 默认构造函数，用于后续赋值(例如udp通信记录发送方地址)
+endpoint();              
+// 绑定协议和端口，用于监听指定协议的数据(v4(), v6())
+endpoint(protocol, port);   
+// 绑定目标地址和端口，用于发送数据
+endpoint(addr, port);      
 
 ip::tcp::endpoint ep;
-ip::tcp::endpoint ep(ip::tcp::v4(), 80);
-ip::tcp::endpoint ep(ip::address::from_string("127.0.0.1"), 80);
+// 端口如果设置成0，则自动分配一个可用端口，常用于客户端或临时通信
+ip::tcp::endpoint ep(ip::tcp::v4(), 0);     // 客户端
+ip::tcp::endpoint ep(ip::tcp::v4(), 80);    // 服务端
+ip::tcp::endpoint ep(ip::address::from_string("192.168.100.45"), 80);
 
 // 根据端点获取地址、端口、协议
 cout << ep.address().to_string();
@@ -32,18 +37,43 @@ cout << ep.protocol();
 
 ## 套接字
 
-```c++
-io_service service;
-ip::udp::socket socket(service, ep);
+endpoint端点是地址信息的封装，socket套接字是网络通信的实体
 
+```c++
+// io_service service; 已过时
+// 为asio封装的函数提供统一的上下文管理(细节暂不清楚，待进一步学习)
+io_context ioc;
+ip::tcp::socket sock(ioc, ep);
+ip::udp::socket sock(ioc, ep);
 ```
 
-## udp 通讯
+## tcp通信
+
 ```c++
-ip::udp::endpoint target_ep;                    // 用于接收记录另一设备的ip和端口号
-ip::udp::endpoint local_ep(ip::address, port);  // 绑定本地端口的ip和端口号
-ip::udp::socket socket(service, local_ep);      // 将套接字绑定本地端点
-socket.receive_from(buffer, target_ep);         // 接受时将自动绑定target_ep的ip和端口
+// 服务端
+// 创建监听器
+tcp::acceptor acc(ioc, ip::tcp::endpoint( ip::tcp::v4(), 8080 ));
+tcp::socket sock(ioc);
+// 等待客户端连接(阻塞操作)
+acc.accept(sock);
+
+// 客户端
+ip::tcp::socket sock(ioc);
+ip::tcp::endpoint serv_ep(addr, port);
+// 连接到服务器
+sock.connect(serv_ep);
+
+sock.write_some(buffer(buf));
+sock.read_some(buffer(buf));
+```
+
+## udp通信
+
+```c++
+ip::udp::endpoint local_ep(ip::udp::v4(), port);
+ip::udp::endpoint target_ep(ip::address, port); 
+ip::udp::socket socket(service, local_ep);    
+socket.receive_from(buffer, target_ep);
 socket.send_to(buffer, target_ep);
 ```
 

@@ -7,6 +7,10 @@
       "key": "杂项",
       "children": [
         {
+          "label": "imgui",
+          "key": "杂项/imgui.md"
+        },
+        {
           "label": "stl学习笔记",
           "key": "杂项/stl学习笔记.md"
         },

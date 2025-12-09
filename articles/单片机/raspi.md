@@ -5,7 +5,7 @@
 ## 换源
 
 ```shell
-# sources.list
+# /etc/apt/sources.list
 
 deb https://mirrors.tuna.tsinghua.edu.cn/debian/ bookworm main contrib non-free non-free-firmware
 deb https://mirrors.tuna.tsinghua.edu.cn/debian/ bookworm-updates main contrib non-free non-free-firmware
@@ -14,15 +14,17 @@ deb https://security.debian.org/debian-security bookworm-security main contrib n
 
 # raspi.list
 
-deb https://mirrors.tuna.tsinghua.edu.cn/raspberrypi bookworm main
+deb https://mirrors.tuna.tsinghua.edu.cn/raspberrypi/ bookworm main
 ```
 
 ## 下载桌面
 
 ```shell
 sudo apt install xfce4
-
 startxfce4
+
+sudo apt install --no-install-recommends lxde
+sudo apt install xorg lightdm
 ```
 
 ## 配置中文系统环境
@@ -39,13 +41,10 @@ sudo apt install language-pack-zh-hans
 sudo dpkg-reconfigure locales
 ```
 
-详细教程链接[Ubuntu设置中文系统环境 - Thenext - 博客园 (cnblogs.com)](https://www.cnblogs.com/Thenext/p/17988588#:~:text=2.1 添加中文语言 1 sudo dpkg-reconfigure locales Windows键盘%3D%3D翻页键（Page Down）部分,后按下回车。 2.2 设置默认语言环境 方向键上下选中 zh_CN.UTF-8 ，Tab键跳转到 OK ，回车。)
-
-
 
 ## 安装opencv
 
-(参考官方指导[How To Install OpenCV on Ubuntu 24.04 LTS - idroot](https://idroot.us/install-opencv-ubuntu-24-04/))
+参考官方指导[How To Install OpenCV on Ubuntu 24.04 LTS - idroot](https://idroot.us/install-opencv-ubuntu-24-04/)
 
 ```shell
 sudo apt install libopencv-dev python3-opencv

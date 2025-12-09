@@ -176,3 +176,79 @@ int main() {
 ```
 
 
+# 个人使用笔记
+
+## 函数返回引用
+
+```c++
+class A {
+public:
+    int& getValue() { return value; }
+private:
+    int value;
+};
+
+class B {
+public:
+    B() = delete;
+    B(A *a) :value(a->getValue()) {}
+private:
+    // 引用类型必须在声明的时候进行初始化，而类成员则必须在构造函数里初始化
+    int& value;
+};
+```
+
+## 文件操作
+
+```c++
+#include <filesystem>
+#include <fstream>
+
+namespace fs = std::filesystem;
+
+int main() {
+    // 设置路径
+    fs::path dir_path = "test_dir";
+    // 使用 / 拼接路径
+    fs::path file_path = dir_path / "test.txt";
+
+    // 创建目录
+    if (!fs::exists(dir_path)) {
+        fs::create_directory(dir_path);
+    }
+
+    std::ofstream file(file_path);
+    file << "hello world!";
+    file.close();
+
+    // 读取文件大小
+    std::cout << "file size:" << fs::file_size(file_path) << "\n";
+
+    fs::path new_file_path = dir_path / "new_name.txt";
+    fs::rename(file_path, new_file_path);
+
+    // 遍历目录
+    for (const auto& entry : fs::directory_iterator(dir_path)) {
+        std::cout << entry.path() << "\n";
+        // 可以直接调用成员函数获取文件类型，例如
+        entry.is_regular_file();
+        entry.is_directory();
+
+        fs::path path = entry.path();
+        // 文件名相关
+        path.filename();       // 获取纯文件名，例如test.txt
+        path.stem();           // 获取文件名主体 test
+        path.extension();      // 获取文件扩展名
+        path.relative_path();  // 获取相对路径(相对于指定的根路径)
+        path.parent_path();    // 获取父目录路径(删除最后一级文件名)
+
+        fs::path filename = entry.filename();
+        std::string s_name = filename.string();
+        char *c_name = filename.c_str();
+    }
+
+    // 删除文件/目录
+    fs::remove(dir_path);
+}
+
+```

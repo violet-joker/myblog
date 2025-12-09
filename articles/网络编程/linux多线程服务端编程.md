@@ -10,7 +10,7 @@
 
 ## 内存问题
 
-+ 缓冲区溢出 ---> 用string或vector<char>
++ 缓冲区溢出 ---> 用string或vector\<char>
 
 + 空悬指针/野指针 ---> 用shared_ptr/weak_ptr，智能引用计数指针
 

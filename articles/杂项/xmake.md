@@ -1,4 +1,4 @@
-模板
+# 模板
 
 ```c++
 add_rules("mode.debug", "mode.release")
@@ -8,12 +8,16 @@ target("main")
     set_kind("binary")
     -- 所要编译的文件
     add_files("src/*.cpp")
+    -- 设置路径
+    add_includedirs("")
     -- 设置工具链
     set_toolchains("clang")
     -- 设置目标文件输出路径
     set_targetdir("build/release")
     -- 设置成静态链接(默认使用动态链接)
     add_ldflags("-static")
+    -- 链接
+    add_links("glfw", "GL")
     -- 设置编译平台
     set_plat("linux")
     -- 设置系统架构
@@ -51,7 +55,7 @@ target("imgui-demo")
 xmake f -p linux -a arm64
 ```
 
-## 配置树莓派工具链
+# 配置树莓派工具链
 
 ```lua
 
@@ -71,4 +75,14 @@ target("main")
     set_plat("linux")
     set_arch("arm") 
     add_ldflags("-static")
+```
+
+# 自定义项目模板
+
+linux环境在~/.local/share/xmake/templates/目录下添加项目模板
+
+使用模板构建项目: 
+
+```shell
+xmake create -t template_name project_name
 ```

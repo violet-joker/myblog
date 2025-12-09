@@ -34,7 +34,7 @@ def get_data(path, name):
 root = os.getcwd()
 unwanted = [
         "get_json.py", "list.json", "linux高性能服务器编程.md", "opengl.md", "计算机网络理论.md",
-        "xmake.md", "设计模式.md", "imgui.md"
+        "xmake.md", "设计模式.md"
         ]
 data = get_data("", "≡")
 json_data = json.dumps(data, ensure_ascii=False, indent=2)
