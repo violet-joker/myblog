@@ -4,9 +4,10 @@
 
 ```c++
 // 根据字符串创建v4或v6地址
-ip::address::from_string(str);
+// ip::address::from_string(str);已被废除
+ip::make_address(string);
 
-ip::address addr = ip::address::from_string("127.0.0.1");
+ip::address addr = ip::make_address("127.0.0.1");
 ```
 
 ## 端点
@@ -27,7 +28,7 @@ ip::tcp::endpoint ep;
 // 端口如果设置成0，则自动分配一个可用端口，常用于客户端或临时通信
 ip::tcp::endpoint ep(ip::tcp::v4(), 0);     // 客户端
 ip::tcp::endpoint ep(ip::tcp::v4(), 80);    // 服务端
-ip::tcp::endpoint ep(ip::address::from_string("192.168.100.45"), 80);
+ip::tcp::endpoint ep(ip::make_address("192.168.100.45"), 80);
 
 // 根据端点获取地址、端口、协议
 cout << ep.address().to_string();
@@ -150,7 +151,7 @@ void run_service(int idx) {
 using namespace std;
 using namespace boost::asio;
 io_context io;
-ip::tcp::endpoint ep(ip::address::from_string("127.0.0.1"), 2001);
+ip::tcp::endpoint ep(ip::make_address("127.0.0.1"), 2001);
 
 void sync_echo(string msg) {
     // 初始化socket，连接终端，发送消息
