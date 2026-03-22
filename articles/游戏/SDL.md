@@ -17,6 +17,10 @@ SDL_Window *window = SDL_CreateWindow(
 if (window)
     SDL_DestroyWindow(window);
 SDL_Quit();
+
+
+// 同时创建window和renderer
+SDL_CreateWindowAndRenderer("name", WINDOW_WIDTH, WINDOW_HEIGHT, 0, &window, &renderer);
 ```
 
 ## 渲染器
@@ -40,6 +44,21 @@ SDL_RenderLine(renderer, x1, y1, x2, y2);
 // 绘制散点
 SDL_FPoint points[100];
 SDL_RenderPoints(renderer, points, SDL_arraysize(points));
+
+// 绘制凸多边形
+SDL_Vertex *vertices;
+SDL_RenderGeometry(renderer, NULL, vertices, vertexCount, NULL, 0);
+// 可设置顶点数据，vertexCount需为3的倍数，本质是三个顶点一组，绘制多个三角形
+vertices[i].position.x = x;
+vertices[i].position.y = y;
+vertices[i].color.r = r; // 0~1.0
+vertices[i].color.g = g;
+vertices[i].color.b = b;
+vertices[i].color.a = a;
+
+// 设置重叠部分的渲染方式，SDL_BLENDMODE_BLEND为混合模式，默认的NONE会覆盖渲染
+SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+
 ```
 
 
@@ -130,7 +149,7 @@ while (!quit) {
     // 非阻塞监听(读取事件队列,将每次读取到的队首赋值给e)
     while (SDL_PollEvent(&e)) {
         if (e.type == SDL_EVENT_QUIT)
-            break; 
+            quit = true; 
         else if ()
     }
     // 设置延时，避免cpu占用过高

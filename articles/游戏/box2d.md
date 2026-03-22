@@ -1,95 +1,3 @@
-> box2d 2.4.1
-
-# Hello Box2D
-
-使用b2BodyDef、b2FixtureDef定义刚体基本信息
-
-```c++
-// 定义物理世界
-b2Vec2 gravity(0, 10);
-b2World world(gravity);
-
-
-b2BodyDef bodyDef;
-// 设置允许动态运动
-bodyDef.type = b2_dynamicBody;
-bodyDef.position.Set(0, 10);
-
-/*
-    bodyDef.type决定刚体在物理世界的根本行为模式，分三种：
-    b2_staticBody静态物体:质量无限大，速度恒为零，不消耗迭代次数，
-    性能消耗低，适合做平台、墙壁;
-    b2_dynamicBody动态物体:有限的质量，受物理定律支配;
-    b2_kinematicBody运动学物体:质量无限大，运动状态由代码控制，
-    适合作为移动平台、传送带。
-
-*/
-
-// 设置刚体形状
-b2PolygonShape box;
-box.SetAsBox(1, 2); // 宽2高4的矩形
-b2FixtureDef fixtureDef;
-fixtureDef.shape = &box;    // 刚体形状
-fixtureDef.density = 1;     // 刚体密度
-fixtureDef.friction = 0.3;  // 摩擦系数
-
-// 创建刚体，并设置基础属性
-b2Body *body = world.CreateBody(&bodyDef);
-body->CreateFixture(&fixtureDef);
-```
-
-
-world.Step推进物理世界的时间步长，计算物体运动状态
-
-```c++
-// 对应60fps
-float timeStep = 1.0f / 60.0f;  
-// 求解约束系统中速度、力约束迭代次数（越高性能消耗越大，模拟越精准）
-// 推荐值：平台跳跃6，赛车游戏8，高精度模拟10
-int velocityIterations = 6; 
-// 求解约束系统重位置约束的迭代次数(修正物体重叠和穿透，关节连接正确性)
-// 位置修正对性能影响更大，一般情况2~3，高精度4~6
-int positionIterations = 2;
-
-for (int i = 0; i < 60; i++) {
-    world.Step(timeStep, velocityIterations, positionIterations);
-    b2Vec2 position = body->GetPosition();
-    float angle = body->GetAngle();
-    std::cout << "position.x, position.y, angle:"
-        << position.x << ", "
-        << position.y << ","
-        << angle << "\n";
-}
-```
-
-# SDL中更新world
-
-sdl逐帧渲染，在时间循环中计时，累计一定时间后调用step更新物理世界
-
-```c++
-SDL_AppResult SDL_AppIterate(void *appstate) {
-    static Uint64 lastTime = SDL_GetTicks();
-    Uint64 currentTime = SDL_GetTicks();
-    if (currentTime - lastTime > (Uint64)(1000 / 60)) {
-        lastTime = currentTiem;
-        world.Step(timeStep, velocityIterations, positionIterations);
-    }
-
-    return SDL_APP_CONTINUE;
-}
-```
-
-# 碰撞模块
-
-```c++
-// 设置多边形
-b2Vec2 vertices[count];
-b2PolygonShape polygon;
-polygon.Set(vertices, count);
-```
-
--------------------------------------------------
-
 > box2d 3.1.0
 
 # Hello Box2D 
@@ -133,8 +41,107 @@ for (int i = 0; i < 90; i++) {
 }
 ```
 
+```c++
+// 按60帧演算
+void update() {
+    static Uint64 lastTime = SDL_GetTicks();
+    Uint64 currentTime = SDL_GetTicks();
+    if (currentTime - lastTime > (Uint64)(1000 / 60)) {
+        lastTime = currentTime;
+        b2World_Step(worldId, timeStep, subStepCount);
+    }
+}
+```
+
 ## cleanup
 
 ```c++
 b2DestroyWorld(worldId);
+```
+
+
+# debug
+
+## b2DebugDraw
+
+使用b2DebugDraw配置回调函数和上下文指针，选择需要的渲染类型即可，若未实现则会跳过渲染
+```c++
+void DrawCircleFcn(b2Vec2 center, float radius, b2HexColor, void *context);
+void DrawPointFcn(b2Vec2 p, float size, b2HexColor color, void *context);
+void DrawPolygonFcn(const b2Vec2 *vertices, int vertexCount, b2HexColor color, void *context);
+void DrawSegmentFcn(b2Vec2 p1, b2Vec2 p2, b2HexColor color, void *context);
+void DrawSolidCapsuleFcn(b2Vec2 p1, b2Vec2 p2, float radius, b2HexColor color, void *context);
+void DrawSolidCircleFcn(b2Transform transform, float radius, b2HexColor color, void *context);
+void DrawSolidPolygonFcn(b2Transform transform, const b2Vec2 *vertices, int vertexCount, float radius, b2HexColor color, void *context);
+void DrawStringFcn(b2Vec2 p, const char *s, b2HexColor color, void *context);
+void DrawTransformFcn(b2Transform transform, void *context);
+```
+
+
+以渲染矩形为例:b2MakeBox()创建的矩形会调用实体多边形函数，以下使用SDL简单渲染边框
+
+```c++
+// 编写回调函数渲染逻辑
+void DrawSolidPolygonFcn(b2Transform transform, const b2Vec2 *vertices, int vertexCount, float radius, b2HexColor color, void *context) {
+    // 根据不同渲染后端，转换上下文指针
+    SDL_Renderer *renderer = (SDL_Renderer *)context;
+    Uint8 r = (color >> 16) & 0xFF;
+    Uint8 g = (color >> 8 ) & 0xFF;
+    Uint8 b = color & 0xFF;
+    Uint8 a = (color >> 24) & 0xFF;
+    SDL_SetRenderDrawColor(renderer, r, g, b, a);
+    b2Vec2 point1, point2;
+    for (int i = 0; i < vertexCount; i++) {
+        // transform为物理世界真实坐标，vertices为物体内部相对坐标，调用相关函数转换坐标
+        point1 = b2TransformPoint(transform, vertices[i]);
+        point2 = b2TransformPoint(transform, vertices[(i + 1) % vertexCount]);
+        point1 *= PIXEL_SIZE;
+        point2 *= PIXEL_SIZE;
+        SDL_RenderLine(renderer, point1.x, point1.y, point2.x, point2.y);
+    }
+    // printf("DrawSolidPolygonFcn\n");
+}
+
+// 配置需要的回调函数
+void setup() {
+    b2DebugDraw debugDraw = b2DefaultDebugDraw();
+    debugDraw.DrawSolidPolygonFcn = DrawSolidPolygonFcn;
+    debugDraw.context = renderer;
+}
+
+// 在游戏循环中启用debugDraw
+void loop() {
+    update();
+    b2World_Draw(worldId, &debugDraw);
+    SDL_RenderPresent(renderer);
+}
+```
+
+
+# b2Chain
+
+由点构成闭合不规则多边形，用于制作围栏;
+注意点的顺序，对于闭合图形，仅有一侧可以检测碰撞，
+比如点序顺时针绘制的图形从外到内产生碰撞，从内到外无碰撞，
+将点序逆时针排列即可达到相反效果。
+
+```c++
+b2BodyId chainBodyId;
+b2ChainId;
+{
+    b2BodyDef bodyDef = b2DefaultBodyDef();
+    bodyDef.type = b2_staticBody;
+    chainBodyId = b2CreateBody(worldId, &bodyDef);
+
+    // 相对于刚体中心坐标的局部坐标
+    b2Vec2 points[4] = {{0, 0}, {5, 0}, {5, 5}, {0, 5}};
+    b2ChainDef chainDef = b2DefaultChainDef();
+    chainDef.isLoop = true;
+    chainDef.points = points;
+    chainDef.count = 4;
+    chainId = b2CreateChain(chainBodyId, &chainDef);
+}
+
+
+// 若想启用b2DebugDraw，需实现回调函数debugDraw.DrawLineFcn;
 ```

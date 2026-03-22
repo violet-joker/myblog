@@ -242,7 +242,7 @@ int main() {
         path.relative_path();  // 获取相对路径(相对于指定的根路径)
         path.parent_path();    // 获取父目录路径(删除最后一级文件名)
 
-        fs::path filename = entry.filename();
+        fs::path filename = path.filename();
         std::string s_name = filename.string();
         char *c_name = filename.c_str();
     }
@@ -251,4 +251,67 @@ int main() {
     fs::remove(dir_path);
 }
 
+```
+
+## 字符串拼接
+
+很多第三方库仍然使用c语言风格字符串作为缓冲区，记录一下字符串拼接，
+太久没用就忘记了函数怎么用。
+
+```c++
+char buf[BUF_SIZE];
+char *src;
+
+// 字符串拼接，末尾自动补\0
+strcat(buf, src);
+// 字符串赋值(不能直接=赋值，使用strcpy拷贝函数)
+strcpy(buf, src);
+```
+
+# 协程
+
+## std::generator<T>
+    
+容器句柄，协程返回类型
+
+
+## co_yield
+
+向调用者返回一个值,暂停当前协程执行,保存所有局部变量,
+将控制权交给调用者.
+return会销毁函数，而co_yield是挂起
+
+协程是非线程安全的,如果generator函数内部持有某个指向外部内存
+的指针,在yield挂起当前generator后,外部也持有该指针并且修改了
+内容,会导致数据竞争,以至于下一次协程函数数据错误.
+
+## co_return
+
+协程的终点,表示协程执行完毕,正式退出.迭代器的end()
+
+## co_await
+
+等待一个异步任务完成,如果没完成,协程挂起;任务完成了回来继续.
+
+
+```c++
+#include <iostream>
+#include <generator>
+#include <ranges>
+
+std::generator<int> f() {
+    int a = 0, b = 1;
+    while (true) {
+        co_yield a;
+        int next = a + b;
+        a = b;
+        b = next;
+    }
+}
+
+int main() {
+    for (int i : f() | std::views::take(10)) {
+        std::cout << i << " ";
+    }
+}
 ```

@@ -3,47 +3,9 @@
   "key": "≡",
   "children": [
     {
-      "label": "单片机",
-      "key": "单片机",
-      "children": [
-        {
-          "label": "8266",
-          "key": "单片机/8266.md"
-        },
-        {
-          "label": "leonardo",
-          "key": "单片机/leonardo.md"
-        },
-        {
-          "label": "esp32",
-          "key": "单片机/esp32.md"
-        },
-        {
-          "label": "raspi",
-          "key": "单片机/raspi.md"
-        }
-      ]
-    },
-    {
       "label": "杂项",
       "key": "杂项",
       "children": [
-        {
-          "label": "imgui",
-          "key": "杂项/imgui.md"
-        },
-        {
-          "label": "驾驶",
-          "key": "杂项/驾驶.md"
-        },
-        {
-          "label": "工具",
-          "key": "杂项/工具.md"
-        },
-        {
-          "label": "stl学习笔记",
-          "key": "杂项/stl学习笔记.md"
-        },
         {
           "label": "c++进阶语法",
           "key": "杂项/c++进阶语法.md"
@@ -57,60 +19,28 @@
           "key": "杂项/qt.md"
         },
         {
+          "label": "stl学习笔记",
+          "key": "杂项/stl学习笔记.md"
+        },
+        {
+          "label": "imgui",
+          "key": "杂项/imgui.md"
+        },
+        {
+          "label": "快捷键_命令",
+          "key": "杂项/快捷键_命令.md"
+        },
+        {
+          "label": "驾驶",
+          "key": "杂项/驾驶.md"
+        },
+        {
           "label": "多线程",
           "key": "杂项/多线程.md"
-        }
-      ]
-    },
-    {
-      "label": "游戏",
-      "key": "游戏",
-      "children": [
-        {
-          "label": "box2",
-          "key": "游戏/box2d.md"
         },
         {
-          "label": "SDL",
-          "key": "游戏/SDL.md"
-        },
-        {
-          "label": "游戏设计",
-          "key": "游戏/游戏设计.md"
-        }
-      ]
-    },
-    {
-      "label": "数据结构与算法",
-      "key": "数据结构与算法",
-      "children": [
-        {
-          "label": "线段树",
-          "key": "数据结构与算法/线段树.md"
-        },
-        {
-          "label": "并查集",
-          "key": "数据结构与算法/并查集.md"
-        },
-        {
-          "label": "单调栈与单调队列",
-          "key": "数据结构与算法/单调栈与单调队列.md"
-        },
-        {
-          "label": "搜索树",
-          "key": "数据结构与算法/搜索树.md"
-        },
-        {
-          "label": "dijkstra",
-          "key": "数据结构与算法/dijkstra.md"
-        },
-        {
-          "label": "树状数组",
-          "key": "数据结构与算法/树状数组.md"
-        },
-        {
-          "label": "ST表",
-          "key": "数据结构与算法/ST表.md"
+          "label": "工具",
+          "key": "杂项/工具.md"
         }
       ]
     },
@@ -129,6 +59,84 @@
         {
           "label": "asio网络编程",
           "key": "网络编程/asio网络编程.md"
+        }
+      ]
+    },
+    {
+      "label": "单片机",
+      "key": "单片机",
+      "children": [
+        {
+          "label": "starfive",
+          "key": "单片机/starfive.md"
+        },
+        {
+          "label": "esp32",
+          "key": "单片机/esp32.md"
+        },
+        {
+          "label": "leonardo",
+          "key": "单片机/leonardo.md"
+        },
+        {
+          "label": "raspi",
+          "key": "单片机/raspi.md"
+        },
+        {
+          "label": "8266",
+          "key": "单片机/8266.md"
+        }
+      ]
+    },
+    {
+      "label": "数据结构与算法",
+      "key": "数据结构与算法",
+      "children": [
+        {
+          "label": "单调栈与单调队列",
+          "key": "数据结构与算法/单调栈与单调队列.md"
+        },
+        {
+          "label": "搜索树",
+          "key": "数据结构与算法/搜索树.md"
+        },
+        {
+          "label": "ST表",
+          "key": "数据结构与算法/ST表.md"
+        },
+        {
+          "label": "树状数组",
+          "key": "数据结构与算法/树状数组.md"
+        },
+        {
+          "label": "dijkstra",
+          "key": "数据结构与算法/dijkstra.md"
+        },
+        {
+          "label": "线段树",
+          "key": "数据结构与算法/线段树.md"
+        },
+        {
+          "label": "并查集",
+          "key": "数据结构与算法/并查集.md"
+        }
+      ]
+    },
+    {
+      "label": "游戏",
+      "key": "游戏",
+      "children": [
+        {
+          "label": "游戏设计",
+          "key": "游戏/游戏设计.md"
+        },
+        {
+          "label": "box2",
+          "key": "游戏/box2d.md"
+        },
+        {
+          "label": "SDL",
+          "key": "游戏/SDL.md"
         }
       ]
     }
