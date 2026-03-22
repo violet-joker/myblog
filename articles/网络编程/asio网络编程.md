@@ -2,7 +2,7 @@
 
 ## IP地址
 
-```c++
+```cpp
 // 根据字符串创建v4或v6地址
 // ip::address::from_string(str);已被废除
 ip::make_address(string);
@@ -12,7 +12,7 @@ ip::address addr = ip::make_address("127.0.0.1");
 
 ## 端点
 
-```c++
+```cpp
 ip::tcp::endpoint;
 ip::udp::endpoint;
 ip::icmp::endpoint;
@@ -40,7 +40,7 @@ cout << ep.protocol();
 
 endpoint端点是地址信息的封装，socket套接字是网络通信的实体
 
-```c++
+```cpp
 // io_service service; 已过时
 // 为asio封装的函数提供统一的上下文管理(细节暂不清楚，待进一步学习)
 io_context ioc;
@@ -50,7 +50,7 @@ ip::udp::socket sock(ioc, ep);
 
 ## tcp通信
 
-```c++
+```cpp
 // 服务端
 // 创建监听器
 tcp::acceptor acc(ioc, ip::tcp::endpoint( ip::tcp::v4(), 8080 ));
@@ -70,7 +70,7 @@ sock.read_some(buffer(buf));
 
 ## udp通信
 
-```c++
+```cpp
 ip::udp::endpoint local_ep(ip::udp::v4(), port);
 ip::udp::endpoint target_ep(ip::address, port); 
 ip::udp::socket socket(service, local_ep);    
@@ -80,7 +80,7 @@ socket.send_to(buffer, target_ep);
 
 ## 检测是否关闭链接
 
-```c++
+```cpp
 char data[0xff];
 boost::system::error_code err;
 size_t length = sock.read_some(buffer(data), err);
@@ -93,7 +93,7 @@ if (err == error::eof) {
 
 + 一个io处理一个线程，基础
 
-```c++
+```cpp
 io_context io;
 ip::tcp::socket sock(io);
 sock.async_connect(ep, connect_handler);
@@ -102,7 +102,7 @@ io.run();
 
 + 一个io实例处理多个线程
 
-```c++
+```cpp
 io_context io;
 ip::tcp::socket sock1(io);
 ip::tcp::socket sock2(io);
@@ -121,7 +121,7 @@ void run_service() {
 
 + 多个io实例处理多个线程
 
-```c++
+```cpp
 io_context io[2];
 ip::tcp::socket sock1(io[0]);
 ip::tcp::socket sock2(io[1]);
@@ -142,7 +142,7 @@ void run_service(int idx) {
 
 ## TCP同步客户端
 
-```c++
+```cpp
 #include <boost/asio.h>
 #include <iostream>
 #include <vector>
@@ -187,7 +187,7 @@ int main() {
 
 ## TCP同步服务端
 
-```c++
+```cpp
 #include <iostream>
 #include <boost/asio.hpp>
 
@@ -218,9 +218,33 @@ int main() {
 
 ```
 
+## UDP同步回显服务器
+
+```cpp
+#include <asio.hpp>
+#include <memory>
+
+using udp = asio::ip::udp;
+asio::io_context ioc;
+// sock无默认构造函数,通过智能指针实现全局声明,再局部具体定义
+std::unique_ptr<udp::socket> sock;
+char buf[1024];
+int local_port = 8080;
+
+int main() {
+    sock = std::make_unique<udp::socket>(ioc, udp::endpoint(udp::v4(), local_port));
+    while (true) {
+        udp::endpoint client_ep;
+        int bytes = sock->receive_from(asio::buffer(buf), client_ep);
+        std::string msg(buf, bytes);
+        sock->send_to(asio::buffer(buf), client_ep);
+    }
+}
+```
+
 # UDP超时结束堵塞
 
-```c++
+```cpp
 // 使用asio::steady_timer定时器设置timeout
 
 steady_timer timer(service, 100ms);
@@ -232,15 +256,14 @@ timer.async_wait([&](error_code ec) {
     }
 });
 
+auto handler_receiver = [&] (error_code ec, size_t bytes) {
+    timer.cancel();
+});
+
 // 缓冲区，端点，处理完成后的回调函数
-socket.async_receive_from(buffer(buf), ep, 
-        [&] (error_code ec, size_t bytes) {
-            timer.cancel(); 
-        });
+socket.async_receive_from(buffer(buf), ep, handler_receiver);
 
 service.run();
-
-
 
 // 回调签名必须严格匹配：错误码，实际接受字节数
 void handler(const asio::error_code& ec, std::size_t bytes_transferred);

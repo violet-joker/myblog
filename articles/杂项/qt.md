@@ -2,11 +2,11 @@
 
 在~/.clangd配置文件添加qt头文件路径
 
-```shell
+```bash
 CompileFlags:
   Add:
-    # c++11标准库
-    - "-I/usr/include/c++/11/"
+    # cpp11标准库
+    - "-I/usr/include/cpp/11/"
     # qt相关头文件路径
     - "-I/usr/include/x86_64-linux-gnu/qt5/"
     - "-I/usr/include/x86_64-linux-gnu/qt5/QtConcurrent"
@@ -25,7 +25,7 @@ CompileFlags:
 ```
 
 xmake 构建项目
-```shell
+```bash
 xmake create -t qt.quickapp test
 xmake create -t qt.widgetapp test
 ```
@@ -57,11 +57,11 @@ target("ui")
 
 # 信号和槽
 
-```c++
+```cpp
 QObject::connect(sender, SINGNAL(singnal()), receiver, SLOT(slot()));
 ```
 
-```c++
+```cpp
 // 工具栏，菜单栏，状态栏
 QToolbar* toolbar = new QToolbar();
 QMenubar* menubar = new QMenubar();
@@ -70,7 +70,7 @@ QStatusbar* statusbar = new QStatusbar();
 
 # QLabel
 
-```c++
+```cpp
 // 标签
 QLabel* label;
 label = new QLabel;
@@ -81,7 +81,7 @@ label->setText(str);
 label->setParent(this);
 ```
 
-```c++
+```cpp
 QLabel* label2 = new QLabel;
 // text() 获取文本
 lable2->setText(lable->text());
@@ -103,7 +103,7 @@ lable->setGeometry(0, 0, 100, 300);
 
 # font
 
-```c++
+```cpp
 QFont font = lable->font();
 font.setBold();         // 粗体
 font.setItalic();       // 斜体
@@ -120,7 +120,7 @@ lable->setStyleSheet("QLabel{background-color: green; color: cyan;}");
 
 # Button
 
-```c++
+```cpp
 // PushButton, RadionButton, CheckBox, 普通，单选，复选按钮
 QPushButton pus = new QPushButton();
 pus->setText("确定");
@@ -130,12 +130,12 @@ pus->setParent(this);
 
 信号函数
 
-```c++
+```cpp
 press(), clicked(), released();
 ```
 
 槽函数
-```c++
+```cpp
 close(), hide()
 
 ...
@@ -148,7 +148,7 @@ void Widget::checked(bool click) {
 
 # QPlainTextEdit
 
-```c++
+```cpp
 QPlainTextEdit plai = new QPlainTextEdit(tr("hello world"));
 plai->setParent(this);
 plai->setPlainText("test");
@@ -164,7 +164,7 @@ plai->setLineWrapMode(QPlainTextEdit::WidgetWidth); // 有软换行
 
 # QLineEdit
 
-```c++
+```cpp
 QLineEdit le = new QLineEdit();
 
 le->setEchoMode(QLineEdit::NoEcho); // 无显输入
@@ -179,7 +179,7 @@ le->setParnet(this);
 
 # QBoxLayout
 
-```c++
+```cpp
 // 水平约束
 QHBoxLayout* hbx1 = new QHBoxLayout(this);
 
@@ -206,7 +206,7 @@ QVBoxLayout hbx2;
 
 # QProgressbar 进度条
 
-```c++
+```cpp
 QProgressBar* pro = new QProgressBar();
 pro->setMinimumWidth(150);
 pro->setMinimumHeight(50);
@@ -224,7 +224,7 @@ pro->setOrientation(Qt::Horizontal);
 
 # Spinbox 显示数字控件
 
-```c++
+```cpp
 QSpinBox spn = new QSpinBox();
 spn->setMaximum(50);
 spn->setMinimum(0);
@@ -252,7 +252,7 @@ void Widget::func(int size) {
 
 # QGraphicsView
 
-```c++
+```cpp
 QGraphicsView* view = new QGraphicsView(0, 0, 300, 400);
 QGraphicsScene* scene = new QGraphicsScene(0, 0, 300, 400);
 view->setScene(scene);
@@ -263,7 +263,7 @@ scene->addItem(item);
 
 # QTableWidget
 
-```c++
+```cpp
 setRowCount(int rows);
 setText(const QString& text);
 
@@ -284,7 +284,7 @@ vtkRenderer --> vtkRenderWindow --> vtkRenderWindowInteractor
 
 ```
 
-```c++
+```cpp
 vtkNew<vtkGenericOpenGLRenderWindow> renderWindow;
 vtkNew<vtkRenderer> renderer;   // 渲染器
 vtkNew<vtkPoints> points;       // 原始数据点(仅包含坐标)
@@ -346,7 +346,7 @@ cells->InsertNextCell({i, j, k});
 ```
 
 ## 添加左下角同步小坐标轴
-```c++
+```cpp
 vtkNew<vtkOrientationMarkerWidget> axesWidget;
 axesWidget->SetOutlineColor(0.93, 0.57, 0.13);
 axesWidget->SetOrientationMarker(axesActor);

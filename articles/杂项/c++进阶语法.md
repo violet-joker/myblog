@@ -1,13 +1,13 @@
-> b站 Cherno C++教程学习笔记
+> b站 Cherno cpp教程学习笔记
 
 # 浅拷贝与深拷贝
 
 浅拷贝不会复制new在堆上的数据，只会拷贝指针，两个指针指向的是同一个
 内存区。导致在析构delete时重复释放内存，程序崩溃。
 
-以用原始c++特性写string数据类型为例
+以用原始cpp特性写string数据类型为例
 
-```c++
+```cpp
 #include <iostream>
 #include <cstring>
 
@@ -44,7 +44,7 @@ int main() {
 
 深拷贝
 
-```c++
+```cpp
 // 重写拷贝构造函数
 String(const String& other)
     : m_size(other.m_size)
@@ -67,7 +67,7 @@ String(const String& other)
 
 没有使用虚函数的情况：将打印两次Entity，根据数据类型寻找对应的函数
 
-```c++
+```cpp
 #include <iostream>
 
 using namespace std;
@@ -107,7 +107,7 @@ int main() {
 
 
 设置虚函数：打印Entity和Jack
-```c++
+```cpp
 class Entity {
 public:
     virtual string GetName() {
@@ -128,7 +128,7 @@ public:
 可用于写接口，要求子类必须完成某项功能。
 类似其他语言中的interface关键字
 
-```c++
+```cpp
 #include <iostream>
 
 using namespace std;
@@ -158,7 +158,7 @@ int main() {
 
 即对象重载()符号，使对象看起来和函数一样。
 
-```c++
+```cpp
 class A {
 public:
     int operator() (int a, int b) {
@@ -180,7 +180,7 @@ int main() {
 
 ## 函数返回引用
 
-```c++
+```cpp
 class A {
 public:
     int& getValue() { return value; }
@@ -200,7 +200,7 @@ private:
 
 ## 文件操作
 
-```c++
+```cpp
 #include <filesystem>
 #include <fstream>
 
@@ -258,7 +258,7 @@ int main() {
 很多第三方库仍然使用c语言风格字符串作为缓冲区，记录一下字符串拼接，
 太久没用就忘记了函数怎么用。
 
-```c++
+```cpp
 char buf[BUF_SIZE];
 char *src;
 
@@ -294,7 +294,7 @@ return会销毁函数，而co_yield是挂起
 等待一个异步任务完成,如果没完成,协程挂起;任务完成了回来继续.
 
 
-```c++
+```cpp
 #include <iostream>
 #include <generator>
 #include <ranges>

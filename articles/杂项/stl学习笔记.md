@@ -1,4 +1,4 @@
-> 《C++17 STL标准库学习教材》笔记
+> 《cpp17 STL标准库学习教材》笔记
 
 # STL容器
 
@@ -10,7 +10,7 @@
 pop_back时间复杂度是O(1)的，由此不必每次删除时移动元素，
 时间效率提高，但会破坏原来的数组顺序。
 
-```c++
+```cpp
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -62,7 +62,7 @@ int main() {
 
 设置同步互斥锁即可，可以继承输出流对象，在析构时加锁、打印缓存的字符串
 
-```c++
+```cpp
 #include <iostream>
 #include <sstream>
 #include <mutex>
@@ -99,7 +99,7 @@ int main() {
 使用condition_variable条件阻塞，防止消费者太快，申请到锁后
 队列却是空的，降低了循环申请锁带来的性能消耗。
 
-```c++
+```cpp
 #include <iostream>
 #include <mutex>
 #include <thread>
@@ -158,7 +158,7 @@ int main() {
 
 另外注意多线程同步互斥打印信息。
 
-```c++
+```cpp
 #include <iostream>
 #include <mutex>
 #include <thread>
@@ -238,7 +238,7 @@ int main() {
 找出首尾位置，截取起始位和长度即可，substr需要传入起始位置，截取长度，拷贝获取子串。
 迭代器寻找，未找到则返回string::npos，一个特殊位置。
 
-```c++
+```cpp
 #include <string>
 #include <iostream>
 
@@ -267,7 +267,7 @@ string_view是对字符串的引用，维护位置和长度，避免多余的拷
 
 
 无需构造去掉首尾空格
-```c++
+```cpp
 #include <iostream>
 #include <string_view>
 
@@ -288,7 +288,7 @@ void print(string_view v) {
 
 注意string_view的字符串拼接时构先构造出string，避免因没有终止符而溢出
 
-```c++
+```cpp
 string a {"hello"}
 string_view b {" world"};
 cout << a + string{b} << endl;
@@ -304,7 +304,7 @@ cout << a + string{b} << endl;
 所有权只能让一个对象拥有，不能让多个对象指向同一块动态分配的对象。
 重点分析下面代码实例内存的回收时机。
 
-```c++
+```cpp
 #include <iostream>
 #include <memory>
 
@@ -350,7 +350,7 @@ int main() {
 shared_ptr增加了计数来维护指向同一块内存的指针个数，释放时计数减一，
 为0时释放内存。重点分析下列代码实例的计数情况。
 
-```c++
+```cpp
 #include <iostream>
 #include <memory>
 
@@ -380,7 +380,7 @@ int main() {
 
 内存被shared_ptr指针拥有时是内存安全的，但要注意以下情况
 
-```c++
+```cpp
 void f(shared_ptr<A> a, shared_ptr<B> b, int c);
 
 ...
@@ -392,7 +392,7 @@ f(new A, new B, other_f());
 如果在a、b申请了空间后other_f抛出了异常，导致参数未能
 传递给f的智能指针，由此造成内存泄露。应该采用下列做法。
 
-```c++
+```cpp
 shared_ptr<A> pa;
 shared_ptr<B> pb;
 int c = other_f();
@@ -408,7 +408,7 @@ f(pa, pb, c);
 
 分析以下代码内存释放的时机，可以发现并不会受到弱指针影响。
 
-```c++
+```cpp
 #include <iostream>
 #include <memory>
 

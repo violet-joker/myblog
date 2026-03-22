@@ -1,11 +1,11 @@
 ## 设置字体:
-```c++
+```cpp
 io.Fonts->AddFontFromFileTTF("路径/字体.fft", 18.0f, nullptr, io.Fonts->GetGlyphRangesChineseSimplifiedCommon());
 ```
 
 ## tips
 
-```c++
+```cpp
 bool is_open;
 ImGui::Begin("window_name", &is_open, window_flags);
 // 传递bool指针只能修改布尔值为false，并非关闭窗口
@@ -18,7 +18,7 @@ if (is_open) {
 
 ## 设置背景docking窗口(达到在原生窗口上停靠的效果)
 
-```c++
+```cpp
 void CreateDockingRootWindow() {
     int w, h;
     SDL_GetWindowSize(window, &w, &h);
@@ -60,7 +60,7 @@ void CreateDockingRootWindow() {
 
 ## 渲染图片
 
-```c++
+```cpp
 // 设置绝对位置
 ImGui::SetCursorScreenPos(ImVec2(x, y));
 // 设置相对位置 (用错函数一直对不上坐标，导致debug半个多点...)

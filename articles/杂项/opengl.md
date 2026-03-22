@@ -1,4 +1,4 @@
-```c++
+```cpp
 struct OpenGL_Context {
     ...
     object* object_Window_Target;

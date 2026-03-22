@@ -1,6 +1,6 @@
 # 模板
 
-```c++
+```lua
 add_rules("mode.debug", "mode.release")
 
 target("main")
@@ -22,43 +22,42 @@ target("main")
     set_plat("linux")
     -- 设置系统架构
     set_arch("arm")
+    -- 设置C++版本
+    set_languages("c++23")
 ```
 
-设置debug模式，编译出可调式文件
 
-```lua
+```bash
+# 设置debug模式，编译出可调式文件
 xmake f -m debug
 xmake f -m release
-```
 
-导出cmake文件
-
-```lua
+# 导出cmake文件
 xmake project -k cmakelists
+
+# 设置编译平台 -p 平台 -a 架构
+xmake f -p linux -a arm64
+
+# 使用模板构建项目
+xmake create -t template_name project_name
+# 可在本地路径或系统路径添加模板
+~/.local/share/xmake/templates/
+/usr/share/xmake/templates
 ```
 
-添加第三方库
 
 ```lua
+添加第三方库
 add_reauires("imgui", {configs = {glfw_opengl3 = true}})
 
 target("imgui-demo")
-    -- ...
+    ...
     add_packages("imgui")
-```
-
-
-设置编译平台
-
-```lua
--- -p 平台 -a 架构
-xmake f -p linux -a arm64
 ```
 
 # 配置树莓派工具链
 
 ```lua
-
 add_rules("mode.release")
 
 toolchain("raspi")
@@ -75,14 +74,4 @@ target("main")
     set_plat("linux")
     set_arch("arm") 
     add_ldflags("-static")
-```
-
-# 自定义项目模板
-
-linux环境在~/.local/share/xmake/templates/目录下添加项目模板
-
-使用模板构建项目: 
-
-```shell
-xmake create -t template_name project_name
 ```

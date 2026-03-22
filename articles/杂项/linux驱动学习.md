@@ -21,7 +21,7 @@ MODULE_LICENSE("Dual BSD/GPL");
 MODULE_AUTHOR("xf");
 ```
 
-```makefile
+```make
 KERNELDIR   ?= /lib/modules/$(shell uname -r)/build
 PWD         := $(shell pwd)
 obj-m       := hello.o
@@ -32,7 +32,7 @@ clean:
     rm -rf *.o  core .depend .*.cmd *.mod.c *.mod *.order *.symvers
 ```
 
-```shell
+```bash
 lsmod
 dmesg
 sudo insmod hello.ko
@@ -85,7 +85,7 @@ MODULE_LICENSE("GPL");
 MODULE_AUTHOR("xf");
 ```
 
-```shell
+```bash
 sudo insmod hello.ko cnt=3 p=fine,world arr=3,2,1
 ```
 
