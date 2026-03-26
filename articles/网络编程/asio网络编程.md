@@ -217,8 +217,44 @@ int main() {
 }
 
 ```
+## UDP同步客户端
 
-## UDP同步回显服务器
+```cpp
+#include <iostream>
+#include <asio.hpp>
+#include <memory>
+
+using udp = asio::ip::udp;
+asio::io_context ioc;
+udp::endpoint server_ep;
+udp::endpoint local_ep;
+int local_port = 9090;
+int server_port = 8080;
+std::unique_ptr<udp::socket> sock;
+
+void sync_echo(std::string msg) {
+    // connect之后不再使用send_to和receive_from
+    sock->send(asio::buffer(msg));
+    char buf[1024];
+    int bytes = sock.receive(asio::buffer(buf));
+    std::string copy(buf, bytes);
+    std::cout << "echo:" << copy << "\n";
+}
+
+int main() {
+    local_ep = udp::endpoint(udp::v4(), local_port);
+    server_ep = udp::endpoint(asio::ip::make_address("127.0.0.1", server_port));
+    sock = std::make_unique<udp::socket>(ioc, local_ep);
+    // 如果服务端固定,可以给sock建立连接,之后不再传递server_ep
+    sock->connect(server_ep);
+    std::string msgs[] = { "test", "hello world!", "fine, good!" };
+    for (auot& msg : msgs) {
+        sync_echo(msg);
+    }
+}
+```
+
+## UDP同步回显服务端
 
 ```cpp
 #include <asio.hpp>

@@ -1,10 +1,12 @@
+[toc]
+
 > box2d 3.1.0
 
 # Hello Box2D 
 
 ## creating a world
 
-```c++
+```cpp
 // C无法将结构体初始化成0，所以有必要使用默认的初始化函数
 b2WorldDef worldDef = b2DefaultWorldDef();
 worldDef.gravity = (b2Vec2){0.0f, 10.0f};   // 默认是-10
@@ -13,7 +15,7 @@ b2WorldId worldId = b2CreateWorld(&worldDef);
 
 ## creating a box
 
-```c++
+```cpp
 b2BodyDef bodyDef = b2DefaultBodyDef();
 bodyDef.type = b2_dynamicBody;
 bodyDef.position = (b2Vec2){0.0f, 4.0f};
@@ -30,7 +32,7 @@ b2CreatePolygonShape(bodyId, &shapeDef, &box);
 
 ## simulating the world
 
-```c++
+```cpp
 float timeStep = 1.0f / 60.0f;
 int subStepCount = 4;
 for (int i = 0; i < 90; i++) {
@@ -41,7 +43,9 @@ for (int i = 0; i < 90; i++) {
 }
 ```
 
-```c++
+timeStep表示前进时间量,subStepCount反映模拟精度与计算成本,平台跳跃游戏设置成2,赛车设置成4,高精度设置成6~8
+
+```cpp
 // 按60帧演算
 void update() {
     static Uint64 lastTime = SDL_GetTicks();
@@ -51,11 +55,29 @@ void update() {
         b2World_Step(worldId, timeStep, subStepCount);
     }
 }
+
+// 使用累积器计算更新时间
+void update() {
+    static Uint64 accumulator = 0;
+    static Uint64 lastTime = SDL_GetTicks();
+    cosnt Uint64 stepMs = 1000 / 60;
+
+    Uint64 currentTime = SDL_GetTicks();
+    Uin64 frameTime = currentTime - lastTime;
+    lastTime = currentTime;
+    accumulator += frameTime;
+
+    // 若卡顿延迟,通过accumulator可以多执行几次step赶超
+    while (accumulator >= stepMs) {
+        b2World_Step(worldId, timeStep, subStepCount);
+        accumulator -= stepMs;
+    }
+}
 ```
 
 ## cleanup
 
-```c++
+```cpp
 b2DestroyWorld(worldId);
 ```
 
@@ -65,7 +87,7 @@ b2DestroyWorld(worldId);
 ## b2DebugDraw
 
 使用b2DebugDraw配置回调函数和上下文指针，选择需要的渲染类型即可，若未实现则会跳过渲染
-```c++
+```cpp
 void DrawCircleFcn(b2Vec2 center, float radius, b2HexColor, void *context);
 void DrawPointFcn(b2Vec2 p, float size, b2HexColor color, void *context);
 void DrawPolygonFcn(const b2Vec2 *vertices, int vertexCount, b2HexColor color, void *context);
@@ -80,7 +102,7 @@ void DrawTransformFcn(b2Transform transform, void *context);
 
 以渲染矩形为例:b2MakeBox()创建的矩形会调用实体多边形函数，以下使用SDL简单渲染边框
 
-```c++
+```cpp
 // 编写回调函数渲染逻辑
 void DrawSolidPolygonFcn(b2Transform transform, const b2Vec2 *vertices, int vertexCount, float radius, b2HexColor color, void *context) {
     // 根据不同渲染后端，转换上下文指针
@@ -125,7 +147,7 @@ void loop() {
 比如点序顺时针绘制的图形从外到内产生碰撞，从内到外无碰撞，
 将点序逆时针排列即可达到相反效果。
 
-```c++
+```cpp
 b2BodyId chainBodyId;
 b2ChainId;
 {

@@ -1,3 +1,5 @@
+[toc]
+
 > b站 Cherno cpp教程学习笔记
 
 # 浅拷贝与深拷贝
@@ -267,6 +269,90 @@ strcat(buf, src);
 // 字符串赋值(不能直接=赋值，使用strcpy拷贝函数)
 strcpy(buf, src);
 ```
+
+## bind
+
+bind用于预设部分参数,减少后续调用时需要提供的参数
+
+```cpp
+#include <functional>
+
+int add(int a, int b) { return a + b; }
+
+// _N表示第N个参数
+auto f = std::bind(add, std::placeholders::_1, 10);
+
+using namespace std::placeholders;
+// bind返回一个可调用对象类型
+// 接受一个int参数,返回int类型
+std::function<int(int)> f = std::bind(add, _1, 10);
+
+
+// 通过bind改变传参顺序
+void print(int a, int b) { cout << a << ", " << b; }
+std::function<void(int, int)> f = std::bind(print, _2, _1);
+```
+
+## 循环引用问题
+
+当A需要持有B,B需要持有A时,便出现了循环引用,编译器创建A类需要先知道B类的结构大小,而创建B类又需要知道A类的结构,于是编译失败.
+
+```cpp
+// class_a.h
+class A {
+    B b;
+    void do() { b.do(); }
+};
+
+// class_b.h
+class B {
+    A a;
+    void do() { a.do(); }
+}
+```
+
+方案1 --- 前置声明,持有指针(指针大小固定,因此可行)
+
+```cpp
+// class_a.h
+class B;
+class A {
+    B *b;
+    void do() { b->do(); }
+};
+
+// class_b.h
+class A;
+class B {
+    A *a;
+    void do() { a->do(); }
+};
+```
+
+方案2 --- 抽象接口,利用CPP多态特性
+
+```cpp
+// base.h
+class Base {
+public:
+    virtual ~Base() = default;
+    virtual void do() = 0;
+}
+
+// class_a.h
+class A {
+    Base *b;
+    void do() { b->do(); }
+};
+
+// class_b.h
+class B : public Base {
+    class *a;
+    void do() { a->do(); };
+};
+```
+
+
 
 # 协程
 

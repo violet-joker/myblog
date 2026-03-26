@@ -1,10 +1,12 @@
+[toc]
+
 # examples
 
 [SDL实例](https://examples.libsdl.org/SDL3/)
 
 # 窗口管理
 
-```c++
+```cpp
 // 创建窗口
 SDL_Window *window = SDL_CreateWindow(
     "title",
@@ -20,12 +22,12 @@ SDL_Quit();
 
 
 // 同时创建window和renderer
-SDL_CreateWindowAndRenderer("name", WINDOW_WIDTH, WINDOW_HEIGHT, 0, &window, &renderer);
+SDL_CreateWindowAndRenderer("name", WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_RESIZEABLE, &window, &renderer);
 ```
 
 ## 渲染器
 
-```c++
+```cpp
 // 渲染器相关函数
 SDL_CreateRenderer();       // 为窗口创建一个渲染器
 SDL_DestroyRenderer();      // 销毁渲染器
@@ -67,7 +69,7 @@ SDL_Renderer渲染过程为"准备-提交"两个阶段(双缓冲机制)，SDL_Re
 SDL_RenderCopy,SDL_RenderDrawLine等函数属于准备阶段，在一个后台缓冲区
 进行所有绘制操作；SDL_RenderPresent将后台缓冲区已完成的画面交换到前台显示。
 
-```c++
+```cpp
 // SDL_RenderClear会清空之前的渲染，并以当前renderer颜色填充背景，需要重新设置颜色
 SDL_SetRenderDrawColor(renderer, r, g, b, a);
 SDL_RenderClear(renderer);
@@ -81,7 +83,7 @@ SDL_RenderPresent(renderer);
 
 ## 纹理
 
-```c++
+```cpp
 // 纹理(可从surface创建、文件加载)
 SDL_CreateTexture();        // 为渲染上下文创建纹理
 SDL_CreateTextureFromSurface();
@@ -101,15 +103,13 @@ SDL_RenderTextureRotated(renderer, texture, NULL, &dst_rect, rotation, &center, 
 
 通过图片创建纹理
 
-```c++
-#include <SDL3_image/SDL_image.h>   // 编译时需要链接SDL3_image
-
+```cpp
 float texture_width;
 float texture_height;
 SDL_Texture *texture;
 
 void init() {
-    SDL_Surface *surface = IMG_Load("path/test.png");
+    SDL_Surface *surface = SDL_LoadPNG("path/test.png");
     texture_width = surface->w;
     texture_height = surface->h;
     texture = SDL_CreateTextureFromSurface(renderer, surface);
@@ -124,7 +124,7 @@ void loop() {
 
 自定义纹理
 
-```c++
+```cpp
 SDL_Surface *surface = SDL_CreateSurface(100, 200, SDL_PIXELFORMAT_RGBA8888);
 SDL_FillSurfaceRect(surface, NULL, SDL_MapRGB(SDL_GetPixelFormatDetails(surface->format), NULL, 255, 100, 100));
 SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
@@ -141,7 +141,7 @@ SDL_Texture是颜料和素材(纹理数据的统一封装)。
 
 # 事件处理
 
-```c++
+```cpp
 // 监听输入
 bool quit = false;
 SDL_Event e;
@@ -165,7 +165,7 @@ while (!quit) {
 
 使用模板便于不同平台之间移植，尤其android，ios。
 
-```c++
+```cpp
 // 启用回调机制
 #define SDL_MAIN_USE_CALLBACKS 1
 #include <SDL3/SDL.h>
