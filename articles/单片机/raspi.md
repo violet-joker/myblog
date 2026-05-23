@@ -5,7 +5,7 @@
 
 ## 无头模式调节终端字体
 
-```
+```bash
 # 打开设置界面
 sudo dpkg-reconfigure console-setup
 ```
@@ -21,7 +21,7 @@ sudo dpkg-reconfigure console-setup
 
 ### rasp os换清华源
 
-```shell
+```bash
 # /etc/apt/sources.list
 
 deb https://mirrors.tuna.tsinghua.edu.cn/debian/ bookworm main contrib non-free non-free-firmware
@@ -38,7 +38,7 @@ deb https://mirrors.tuna.tsinghua.edu.cn/raspberrypi/ bookworm main
 
 清华源ubuntu-ports栏
 
-```shell
+```bash
 Types: deb
 URIs: https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports
 Suites: noble noble-updates noble-backports
@@ -82,7 +82,7 @@ Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
 
 ## 下载桌面
 
-```shell
+```bash
 sudo apt install xfce4
 startxfce4
 
@@ -97,7 +97,7 @@ sudo systemctl set-default graphical.target
 也许是ubuntu内核架构与raspi-config脚本在KMS管理上存在冲突，
 放弃X11驱动，切换到wayland方案成功打开桌面
 
-```shell
+```bash
 # 安装核心组件
 sudo apt install labwc xwayland qtwayland5
 # 配置LXQt在Wayland下运行
@@ -114,13 +114,13 @@ sudo apt install sddm
 
 安装中文语言包
 
-```shell
+```bash
 sudo apt install language-pack-zh-hans
 ```
 
 添加中文语言
 
-```shell
+```bash
 sudo dpkg-reconfigure locales
 ```
 
@@ -129,19 +129,19 @@ sudo dpkg-reconfigure locales
 
 参考官方指导[How To Install OpenCV on Ubuntu 24.04 LTS - idroot](https://idroot.us/install-opencv-ubuntu-24-04/)
 
-```shell
+```bash
 sudo apt install libopencv-dev python3-opencv
 ```
 
 ## vnc
 
-```shell
+```bash
 sudo apt install tightvncserver
 ```
 
 启用vncserver端口1，
 
-```shell
+```bash
 vncserver :1
 export DISPLAY=:1
 startxfce4
@@ -150,7 +150,7 @@ startxfce4
 ## 树莓派5，关闭5v5a电流启动检测：
 
 修改
-```shell
+```bash
 sudo vi /boot/firmware/config.txt
 
 # 添加
@@ -159,15 +159,15 @@ usb_max_current_enable=1
 
 ## 安装zsh
 
-```shell
+```bash
 sudo apt install zsh
 chsh -s /bin/zsh
-echo $SHELL
+echo $bash
 ```
 
 ## 命令行连接wifi
 
-```shell
+```bash
 nmcli dev wifi list
 nmcli dev wifi connect "SSID名称" password "密码"
 nmcli dev show      # 查看ip

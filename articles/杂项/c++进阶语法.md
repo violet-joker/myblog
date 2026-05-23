@@ -352,7 +352,23 @@ class B : public Base {
 };
 ```
 
+## 随机数(C++23风格)
 
+```cpp
+#include <iostream>
+#include <random>
+
+int main() {
+    // 获取硬件随机种子
+    std::random_device rd;
+    // 初始化生成器(梅森旋转算法)
+    std::mt19937 gen(rd());
+    // 定义分布范围,闭区间[1, 13]
+    std::uniform_int_distribution<int> distrib(1, 13);
+    // 生成点数
+    int value = distrib(gen);
+}
+```
 
 # 协程
 

@@ -87,6 +87,19 @@ b2DestroyWorld(worldId);
 ## b2DebugDraw
 
 使用b2DebugDraw配置回调函数和上下文指针，选择需要的渲染类型即可，若未实现则会跳过渲染
+
+```cpp
+// 绑定相关内容
+void init() {
+    debugDraw.DrawSolidPolygonFcn = DrawSolidPolygonFcn;
+    debugDraw.DrawSegmentFcn = DrawSegmentFcn;
+    // SDL里使用renderer管理上下文
+    debugDraw.context = renderer;
+    debugDraw.drawShapes = true;
+    debugDraw.drawJoints = true;
+}
+```
+
 ```cpp
 void DrawCircleFcn(b2Vec2 center, float radius, b2HexColor, void *context);
 void DrawPointFcn(b2Vec2 p, float size, b2HexColor color, void *context);

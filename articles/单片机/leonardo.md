@@ -1,6 +1,6 @@
 # Permission denied
 
-```shell
+```bash
 avrdude: ser_open(): can't open device "/dev/ttyACM0": Permission denied
 Failed uploading: uploading error: exit status 1
 ```
@@ -8,13 +8,13 @@ Failed uploading: uploading error: exit status 1
 大多数linux发行版使用dialout组来管理串口访问权限，将用户添加到
 dialout组，重启生效。
 
-```shell
+```bash
 sudo usermod -a -G dialout $USER
 ```
 
 # 点亮板载led
 
-```c++
+```cpp
 void setup() {
   // put your setup code here, to run once:
   pinMode(13, OUTPUT);
@@ -45,7 +45,7 @@ void loop() {
 
 ## 添加软件库(XInput)
 
-```c++
+```cpp
 #include <XInput.h>
 
 void setup() {
@@ -96,7 +96,7 @@ B相:          低-----高-----低-----高
 
 ### 代码
 
-```c++
+```cpp
 // 使用D2、D3引脚触发中断
 #define A_PIN 2
 #define B_PIN 3
@@ -132,7 +132,7 @@ void setup() {
 
 使用Encoder库最简便
 
-```c++
+```cpp
 #include <XInput>
 #include <Encoder.h>
 #define A_PIN 2
@@ -172,7 +172,7 @@ void loop() {
 原理: 开合电路中gpio电压为3.3v，微动开关触发闭合后，闭合电路中gpio
 电压为0。
 
-```c++
+```cpp
 void setup() {
     // 将D4~D9设置成档位控制，尽量留出其他特殊引脚
     // A类引脚为模拟输入引脚，将连续变化的电压转换成0~1023数字值，用于识别霍尔踏板

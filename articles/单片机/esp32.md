@@ -2,7 +2,7 @@
 
 # 点亮板载led
 
-```c++
+```cpp
 void setup() {
     pinMode(LED_BUILTIN, OUTPUT);
 }
@@ -39,7 +39,7 @@ SPI3_HOST (VSPI) - 通常引脚: MOSI=35, SCLK=36
 <!--  使用HSPI引脚则需要宏USE_HSPI_PORT -->
 ```
 
-```c++
+```cpp
 #include <TFT_eSPI.h>
 
 #define ST7735_DRIVER   // 选择对应驱动
@@ -59,7 +59,7 @@ SPI3_HOST (VSPI) - 通常引脚: MOSI=35, SCLK=36
 
 简单测试
 
-```c++
+```cpp
 #include <TFT_eSPI.h>
 
 TFT_eSPI tft = TFT_eSPI();
@@ -86,7 +86,7 @@ ImDuino项目，配置屏幕尺寸，并重新实现screen_init和screen_draw函
 
 完整实例代码
 
-```c++
+```cpp
 #include <TFT_eSPI.h>
 #include <imgui.h>
 
@@ -195,7 +195,7 @@ void loop() {
 
 # 控制舵机
 
-```c++
+```cpp
 #include <ESP32Servo.h>
 
 #define PIN_SERVO 14
@@ -215,7 +215,7 @@ void setup() {
 
 ## 创建任务
 
-```c++
+```cpp
 TaskHandle_t task_handle;
 
 void setup() {
@@ -236,7 +236,7 @@ void task_one(void *param) {
 
 QueueHandle_t queHandle;
 
-```c++
+```cpp
 void setup() {
     // 优先级、分配内存大小
     queHandle = xQueueCreate(1, sizeof(unsigned char));
@@ -269,7 +269,7 @@ void task(void *param) {
 
 ## 互斥锁
 
-```c++
+```cpp
 SemaphoreHandle_t mutex;
 
 void setup() {
@@ -290,7 +290,7 @@ void task() {
 
 # 读写SD卡
 
-```c++
+```cpp
 File dir = SD.open(path);
 dir.isDirectory();
 
@@ -299,7 +299,7 @@ File file = dir.openNextFile();
 
 ```
 
-```c++
+```cpp
 // 配置SPI引脚(MISO, SCLK, MOSI, CS)
 #define SD_CS_PIN 4
 
