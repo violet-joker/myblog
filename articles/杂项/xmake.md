@@ -24,6 +24,11 @@ target("main")
     set_arch("arm")
     -- 设置C++版本
     set_languages("c++23")
+    -- 跳过系统文件和第三方库文件,便于gdb调试
+    add_cxflags("-fdebug-prefix-map=/usr/include/c++/15/=[std]/")
+    add_cxflags("-fdebug-prefix-map=/usr/include/=[sys]/")
+    add_cxflags("-fdebug-prefix-map=/usr/local/include/=[libs]/")
+    add_cxflags("-fdebug-prefix-map=/usr/lib/gcc/=[gcc]/")
 ```
 
 
@@ -37,6 +42,9 @@ xmake project -k cmakelists
 
 # 设置编译平台 -p 平台 -a 架构
 xmake f -p linux -a arm64
+
+# 配置 Android x86_64 架构
+xmake f -p android -a x86_64 --ndk=~/Android/Sdk/ndk/26.1.10909125
 
 # 使用模板构建项目
 xmake create -t template_name project_name

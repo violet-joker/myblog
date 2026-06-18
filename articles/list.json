@@ -31,6 +31,10 @@
           "key": "杂项/快捷键_命令.md"
         },
         {
+          "label": "godot",
+          "key": "杂项/godot.md"
+        },
+        {
           "label": "驾驶",
           "key": "杂项/驾驶.md"
         },
@@ -41,6 +45,10 @@
         {
           "label": "多线程",
           "key": "杂项/多线程.md"
+        },
+        {
+          "label": "androi",
+          "key": "杂项/android.md"
         }
       ]
     },

@@ -417,3 +417,68 @@ int main() {
     }
 }
 ```
+
+## others
+
+```cpp
+// 声明协程函数(用optional修饰便于判空,通过*解引用)
+std::optional<std::generator<int>> gen;
+// 通过伪表达式声明协程对象的迭代器
+std::optional<decltype(std::declval<std::generator<int>>().begin())> gen_it;
+```
+
+使用协程实现发牌动画
+
+```cpp
+std::optional<std::generator<SDL_FPoint>> current_anim;
+std::optional<decltype(std::declval<std::generator<SDL_FPoint>>().begin())> anim_it;
+
+// 协程函数创建从pos_from移动到pos_to的序列点坐标
+std::generator<SDL_FPoint> moveCard(SDL_FPoint pos_from, SDL_FPoint pos_to) {
+    SDL_FPoint pos = pos_from;
+    // 时间间隔内生成20个散列点
+    SDL_FPoint offset = SDL_FPoint{(pos_to.x - pos_from.x) / 20, (pos_to.y - pos_from.y) / 20};
+    uint32_t start_wait;
+    for (int i = 0; i < 20; i++) {
+        pos.x += offset.x;
+        pos.y += offset.y;
+        start_wait = SDL_GetTicks();
+        // 间隔20ms
+        while (SDL_GetTicks() - start_wait < 20) {
+            co_yield pos;
+        }
+    }
+}
+
+// 给玩家发牌
+void dealCardToPlayer() {
+    //发牌逻辑省略
+    ...
+    // 播放动画
+    current_anim = moveCard(pos_from, pos_to);
+}
+
+// 在SDL事件循环中更新画面
+void update() {
+    // 判断optional是否有值
+    if (current_anim) {
+        // 解引用得到协程对象
+        auto& gen = *current_anim;
+
+        // gen.begin仅能调用一次,因此需要先声明一个迭代器
+        if (!anim_it) anim_it = gen.begin();
+        auto& it = *anim_it;
+
+        if (it == gen.end()) {
+            // reset方法将optional重新置空,用于下次动画
+            current_anim.reset();
+            anim_it.reset();
+        } else {
+            SDL_FPoint pos = *it;
+            // 在对应坐标绘制卡牌
+            drawCard(pos);
+            it++;
+        }
+    }
+}
+```
