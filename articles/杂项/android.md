@@ -81,73 +81,37 @@ APP_CPPFLAGS += -std=c++23
 
 ```bash
 # 需提前配置好ndk环境变量,使用ndk编译
-# x86_64
-mkdir -p build-android-x86_64 && cd build-android-x86_64
+# 定义架构变量（只需修改这一行）
+# 可选: armeabi-v7a, arm64-v8a, x86, x86_64
+# ABI=x86
+# ABI=x86_64
+# ABI=armeabli-v7a
+ABI=arm64-v8a
 
+# 构建目录
+BUILD_DIR="build-android-${ABI}"
+
+# 创建并进入构建目录
+mkdir -p ${BUILD_DIR} && cd ${BUILD_DIR}
+
+# CMake 配置
 cmake .. \
     -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK/build/cmake/android.toolchain.cmake \
-    -DANDROID_ABI=x86_64 \
+    -DANDROID_ABI=${ABI} \
     -DANDROID_PLATFORM=android-21 \
     -DANDROID_STL=c++_shared \
     -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_INSTALL_PREFIX=~/android_libs/x86_64 \
+    -DCMAKE_INSTALL_PREFIX=~/android_libs/${ABI} \
     -DBUILD_SHARED_LIBS=ON
 
 make -j8
 make install
 cd ..
 ```
+rmlui依赖freetype字体库,需先编译好对应平台的freetype文件,并手动设置路径
 
 ```bash
-# x86
-mkdir -p build-android-x86 && cd build-android-x86
-
 cmake .. \
-    -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK/build/cmake/android.toolchain.cmake \
-    -DANDROID_ABI=x86 \
-    -DANDROID_PLATFORM=android-21 \
-    -DANDROID_STL=c++_shared \
-    -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_INSTALL_PREFIX=~/android_libs/x86 \
-    -DBUILD_SHARED_LIBS=ON
-
-make -j8
-make install
-cd ..
-```
-
-```bash
-# arm64-v8a
-mkdir -p build-android-arm64-v8a && cd build-android-arm64-v8a
-
-cmake .. \
-    -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK/build/cmake/android.toolchain.cmake \
-    -DANDROID_ABI=arm64-v8a \
-    -DANDROID_PLATFORM=android-21 \
-    -DANDROID_STL=c++_shared \
-    -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_INSTALL_PREFIX=~/android_libs/arm64-v8a \
-    -DBUILD_SHARED_LIBS=ON
-
-make -j8
-make install
-cd ..
-```
-
-```bash
-# armeabi-v7a
-mkdir -p build-android-armeabi-v7a && cd build-android-armeabi-v7a
-
-cmake .. \
-    -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK/build/cmake/android.toolchain.cmake \
-    -DANDROID_ABI=armeabi-v7a \
-    -DANDROID_PLATFORM=android-21 \
-    -DANDROID_STL=c++_shared \
-    -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_INSTALL_PREFIX=~/android_libs/armeabi-v7a \
-    -DBUILD_SHARED_LIBS=ON
-
-make -j8
-make install
-cd ..
+    -DFREETYPE_INCLUDE_DIRS=/home/xf/android_libs/${ABI}/include/freetype2 \
+    -DFREETYPE_LIBRARY=/home/xf/android_libs/${ABI}/lib/libfreetype.so
 ```
